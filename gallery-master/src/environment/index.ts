@@ -1,7 +1,7 @@
 import Core from "../core";
 import Loader from "../loader";
 import {BOARD_TEXTURES, BOARDS_INFO, COLLISION_SCENE_URL, ON_LOAD_MODEL_FINISH, ON_LOAD_PROGRESS, STATIC_SCENE_URL} from "../Constants";
-import {Group, Material, Mesh, MeshBasicMaterial, Object3D, SRGBColorSpace, Texture, PlaneGeometry} from "three";
+import {Group, Material, Mesh, MeshBasicMaterial, Object3D, SRGBColorSpace, Texture, PlaneGeometry, DoubleSide} from "three";
 import {isLight, isMesh} from "../utils/typeAssert";
 import {MeshBVH, MeshBVHOptions, StaticGeometryGenerator} from "three-mesh-bvh";
 import {Reflector} from "../lib/Reflector";
@@ -39,8 +39,8 @@ export default class Environment {
 
 	private async _loadBoardsTexture(): Promise<void> {
 		for (let i = 0; i < BOARD_TEXTURES.length; i++) {
-			this.texture_boards[i + 1] = await this.loader.texture_loader.loadAsync(BOARD_TEXTURES[i]);
-		}
+    this.texture_boards[i + 1] = await this.loader.texture_loader.loadAsync(BOARD_TEXTURES[i]);
+}
 
 		for (const key in this.texture_boards) {
 			const texture = this.texture_boards[key]
@@ -69,6 +69,7 @@ export default class Environment {
 	private _configureGallery() {
 		for (const key in this.texture_boards) {
 			const board = this.gallery_boards[`gallery${key}_board`];
+			if (!board) continue; 
 			const board_material = board.material;
 			(board_material as MeshBasicMaterial).map = this.texture_boards[key];
 			board.userData = {
@@ -90,6 +91,29 @@ export default class Environment {
 
 			(board_material as MeshBasicMaterial).needsUpdate = true;
 		}
+		
+		// === TẠO BOARD LỚN ===
+		// Lấy texture cuối cùng trong BOARD_TEXTURES
+		const bigTexture = this.texture_boards["11"]; 
+console.log(this.texture_boards["11"]);
+		// Kích thước lớn (ví dụ: 12 x 7 mét)
+		const bigWidth = 25;
+		const bigHeight =15;
+
+		// Tạo board lớn
+		const bigBoard = new Mesh(
+			new PlaneGeometry(bigWidth, bigHeight),
+			new MeshBasicMaterial({ map: bigTexture, side: DoubleSide })
+		);
+
+		// Đặt vị trí board lớn (bạn có thể điều chỉnh lại cho phù hợp)
+		bigBoard.position.set(0, bigHeight / 15 + 10, 50.5); // X, Y, Z
+	bigBoard.rotation.y = Math.PI;// Quay mặt board vào tường phía sau
+
+		this.core.scene.add(bigBoard);
+
+		// Nếu muốn tương tác (click/tooltip)
+		this.raycast_objects.push(bigBoard);
 	}
 
 
@@ -114,7 +138,7 @@ export default class Environment {
 					if (item.name === "computer") {
 						item.userData = {
 							name: item.name,
-							title: "Ồ ! đây là 🏕",
+							title: "Bản nhạc này dành riêng cho bạn!",
 						};
 						this.raycast_objects.push(item);
 					}

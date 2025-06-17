@@ -106,7 +106,6 @@ export default class Character {
 				// Kiểm tra xem cảnh có giao với hình trụ không và điều chỉnh
 				const tri_point = this.temp_vector;
 				const capsule_point = this.temp_vector2;
-
 				const distance = tri.closestPointToSegment(this.temp_segment, tri_point, capsule_point);
 				if (distance < capsule_info.radius) {
 					const depth = capsule_info.radius - distance;

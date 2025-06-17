@@ -41,36 +41,36 @@ export default class World {
 	}
 
 	/*
-	* 点击进入展馆后的回调
+	* Callback khi click vào để vào triển lãm
 	* */
 	private _onEnterApp() {
 		this.audio.playAudio();
-		// 进入后才允许控制键盘
+		//Callback khi click vào để vào triển lãm
 		this.core.control_manage.enabled();
 	}
 
 	private async _onLoadModelFinish() {
-		// 场景模型加载完毕后开始加载音频
+		// Sau khi mô hình cảnh được tải xong thì bắt đầu tải âm thanh
 		await this.audio.createAudio();
 
-		// 音频加载完毕后移除加载进度UI，显示进入确认UI
+		// Sau khi âm thanh tải xong thì xóa UI tiến trình tải, hiển thị UI xác nhận vào
 		this.core.ui.removeLoading();
 		this.core.ui.showLoadingConfirm();
 
-		// 场景模型加载完毕后将场景中需要光线投射检测的物体传入给rayCasterControls
+		// Sau khi âm thanh tải xong thì xóa UI tiến trình tải, hiển thị UI xác nhận vào rayCasterControls
 		this.ray_caster_controls.bindClickRayCastObj(this.environment.raycast_objects);
 	}
 
 	private _handleLoadProgress([{url, loaded, total}]: [{url: string, loaded: number, total: number}]) {
 		const percentage = ((loaded / total) * 100).toFixed(2);
 		if (/.*\.(blob|glb)$/i.test(url)) {
-			this.core.ui.updateLoadingProgress(`${url.includes("collision") ? "加载碰撞场景模型" : "加载其他场景模型"}：${percentage}%`);
+			this.core.ui.updateLoadingProgress(`${url.includes("collision") ? "Đang tải mô hình va chạm" : "Đang tải mô hình cảnh khác"}：${percentage}%`);
 		}
 		if (/.*\.(jpg|png|jpeg)$/i.test(url)) {
-			this.core.ui.updateLoadingProgress("加载图片素材中...");
+			this.core.ui.updateLoadingProgress("đang tải tài nguyên ảnh...");
 		}
 		if (/.*\.(m4a|mp3)$/i.test(url)) {
-			this.core.ui.updateLoadingProgress("加载声音资源中...");
+			this.core.ui.updateLoadingProgress("đang tải tài nguyên âm thanh...");
 		}
 	}
 

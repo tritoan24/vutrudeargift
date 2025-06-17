@@ -2,22 +2,32 @@
 * Model Resources
 * */
 export const COLLISION_SCENE_URL = new URL("./assets/models/scene_collision.glb", import.meta.url).href;
-export const STATIC_SCENE_URL = new URL("./assets/models/scene_desk_obj.glb", import.meta.url).href;
+export const STATIC_SCENE_URL = new URL("./assets/models/scene_desk_obj.glb   ", import.meta.url).href;
 
 /*
 * Texture Resources
 * */
 export const BOARD_TEXTURES = [
-	new URL("./assets/boards/1.png", import.meta.url).href,
-	new URL("./assets/boards/2.png", import.meta.url).href,
-	new URL("./assets/boards/3.jpg", import.meta.url).href,
-	new URL("./assets/boards/4.jpg", import.meta.url).href,
-	new URL("./assets/boards/5.png", import.meta.url).href,
-	new URL("./assets/boards/6.png", import.meta.url).href,
-	new URL("./assets/boards/7.png", import.meta.url).href,
-	new URL("./assets/boards/8.jpg", import.meta.url).href,
-	new URL("./assets/boards/9.jpg", import.meta.url).href,
-	new URL("./assets/boards/10.png", import.meta.url).href
+	// new URL("./assets/boards/1.png", import.meta.url).href,
+	// new URL("./assets/boards/2.png", import.meta.url).href,
+	// new URL("./assets/boards/3.jpg", import.meta.url).href,
+	// new URL("./assets/boards/4.jpg", import.meta.url).href,
+	// new URL("./assets/boards/5.png", import.meta.url).href,
+	// new URL("./assets/boards/6.png", import.meta.url).href,
+	// new URL("./assets/boards/7.png", import.meta.url).href,
+	// new URL("./assets/boards/8.jpg", import.meta.url).href,
+	// new URL("./assets/boards/9.jpg", import.meta.url).href,
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750091709/x0af91kvihtfyv4qcyis.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750084596/kp2mlcmsl1izmgekza6p.jpg",
+	"https://res.cloudinary.com/dtcyfyauk/image/upload/v1750108775/jyzvvfj3b3se2nuyzenr.jpg"
 ];
 
 /*
