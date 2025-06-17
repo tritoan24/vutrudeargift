@@ -22,7 +22,6 @@ export default class Environment {
 		this._loadScenes();
 	}
 
-
 	private async _loadScenes() {
 		try {
 			await this._loadSceneAndCollisionDetection();
@@ -39,11 +38,11 @@ export default class Environment {
 
 	private async _loadBoardsTexture(): Promise<void> {
 		for (let i = 0; i < BOARD_TEXTURES.length; i++) {
-    this.texture_boards[i + 1] = await this.loader.texture_loader.loadAsync(BOARD_TEXTURES[i]);
-}
+			this.texture_boards[i + 1] = await this.loader.texture_loader.loadAsync(BOARD_TEXTURES[i]);
+		}
 
 		for (const key in this.texture_boards) {
-			const texture = this.texture_boards[key]
+			const texture = this.texture_boards[key];
 			texture.colorSpace = SRGBColorSpace;
 
 			// Tính toán tỷ lệ co giãn cần thiết dựa trên tỷ lệ khung hình của kết cấu và tỷ lệ khung hình của mặt phẳng
@@ -65,11 +64,10 @@ export default class Environment {
 		return Promise.resolve();
 	}
 
-	
 	private _configureGallery() {
 		for (const key in this.texture_boards) {
 			const board = this.gallery_boards[`gallery${key}_board`];
-			if (!board) continue; 
+			if (!board) continue;
 			const board_material = board.material;
 			(board_material as MeshBasicMaterial).map = this.texture_boards[key];
 			board.userData = {
@@ -77,6 +75,9 @@ export default class Environment {
 				title: BOARDS_INFO[key].title,
 				author: BOARDS_INFO[key].author,
 				describe: BOARDS_INFO[key].describe,
+				type: BOARDS_INFO[key].type,
+				question: BOARDS_INFO[key].question,
+				options: BOARDS_INFO[key].options,
 				index: key,
 				src: this.texture_boards[key].image.src,
 				show_boards: true
@@ -91,14 +92,13 @@ export default class Environment {
 
 			(board_material as MeshBasicMaterial).needsUpdate = true;
 		}
-		
+
 		// === TẠO BOARD LỚN ===
 		// Lấy texture cuối cùng trong BOARD_TEXTURES
-		const bigTexture = this.texture_boards["11"]; 
-console.log(this.texture_boards["11"]);
+		const bigTexture = this.texture_boards["10"];
 		// Kích thước lớn (ví dụ: 12 x 7 mét)
 		const bigWidth = 25;
-		const bigHeight =15;
+		const bigHeight = 15;
 
 		// Tạo board lớn
 		const bigBoard = new Mesh(
@@ -108,14 +108,25 @@ console.log(this.texture_boards["11"]);
 
 		// Đặt vị trí board lớn (bạn có thể điều chỉnh lại cho phù hợp)
 		bigBoard.position.set(0, bigHeight / 15 + 10, 50.5); // X, Y, Z
-	bigBoard.rotation.y = Math.PI;// Quay mặt board vào tường phía sau
+		bigBoard.rotation.y = Math.PI; // Quay mặt board vào tường phía sau
+		bigBoard.userData = {
+			name: "big_board",
+			title: BOARDS_INFO["10"].title,
+			author: BOARDS_INFO["10"].author,
+			describe: BOARDS_INFO["10"].describe,
+			type: BOARDS_INFO["10"].type,
+			question: BOARDS_INFO["10"].question,
+			options: BOARDS_INFO["10"].options,
+			index: "10",
+			src: bigTexture ? bigTexture.image.src : "",
+			show_boards: true
+		};
 
 		this.core.scene.add(bigBoard);
 
 		// Nếu muốn tương tác (click/tooltip)
 		this.raycast_objects.push(bigBoard);
 	}
-
 
 	private _createSpecularReflection() {
 		const mirror = new Reflector(new PlaneGeometry(100, 100), {

@@ -75,12 +75,20 @@ export default class World {
 	}
 
 	private _onClickRayCast([object]: [object: Object3D]) {
-		this.core.ui.showBoardsBox(
-			object.userData.title,
-			object.userData.author,
-			object.userData.describe,
-			object.userData.src,
-		);
+		if (object.userData.type === "question") {
+			this.core.ui.showQuestionBox(
+				object.userData.question,
+				object.userData.options,
+				object.userData.src
+			);
+		} else {
+			this.core.ui.showBoardsBox(
+				object.userData.title,
+				object.userData.author,
+				object.userData.describe,
+				object.userData.src
+			);
+		}
 	}
 
 	private _onShowTooltip([{msg, show_preview_tips}]: [{ msg: string, show_preview_tips: boolean }]) {

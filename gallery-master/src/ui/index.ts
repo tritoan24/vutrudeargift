@@ -7,10 +7,8 @@ export default class UI {
 	private doms: {
 		loading: HTMLElement;
 		loading_complete: HTMLElement;
-
 		preview_tooltip: HTMLElement;
 		preview_tips: HTMLElement;
-
 		boards_dialog: HTMLElement;
 		boards_container: HTMLElement;
 		boards_content: HTMLElement;
@@ -18,10 +16,14 @@ export default class UI {
 		boards_author: HTMLElement;
 		boards_describe: HTMLElement;
 		boards_img: HTMLImageElement;
-
 		help_btn: HTMLElement;
-
 		operating_intro: HTMLElement;
+		question_block: HTMLElement;
+		question_container: HTMLElement;
+		question_text: HTMLElement;
+		question_options: HTMLElement;
+		question_result: HTMLElement;
+		question_img: HTMLImageElement;
 	};
 
 	constructor() {
@@ -41,6 +43,12 @@ export default class UI {
 			boards_img: document.querySelector(".boards-container .img img")!,
 			help_btn: document.querySelector(".help")!,
 			operating_intro: document.querySelector(".operating-intro")!,
+			question_block: document.querySelector(".question-block")!,
+			question_container: document.querySelector(".question-block .question-container")!,
+			question_text: document.querySelector(".question-block .question-text")!,
+			question_options: document.querySelector(".question-block .options")!,
+			question_result: document.querySelector(".question-block .result")!,
+			question_img: document.querySelector(".question-block .image img")!
 		};
 
 		document.body.addEventListener("click", this.handleClick.bind(this));
@@ -48,30 +56,31 @@ export default class UI {
 
 	handleClick(e: MouseEvent) {
 		if (e.target instanceof HTMLElement) {
+			const target = e.target; // Store e.target as HTMLElement
 			const MAP_EVENT = [
 				{
-					verify: () => {
-						return (e.target as HTMLElement).classList.contains("start");
-					},
+					verify: () => target.classList.contains("start"),
 					handler: this.onClickEnterApp.bind(this)
 				},
 				{
-					verify: () => {
-						return this._isBInA(["boards-info-close", "boards-info"], (e.target as HTMLElement).classList.value.split(" "));
-					},
+					verify: () => this._isBInA(["boards-info-close", "boards-info"], target.classList.value.split(" ")),
 					handler: this.hideBoardsBox.bind(this)
 				},
 				{
-					verify: () => {
-						return (e.target as HTMLElement).classList.contains("help");
-					},
+					verify: () => this._isBInA(["question-close", "question-block"], target.classList.value.split(" ")),
+					handler: this.hideQuestionBox.bind(this)
+				},
+				{
+					verify: () => target.classList.contains("help"),
 					handler: this.showHelp.bind(this)
 				},
 				{
-					verify: () => {
-						return this._isBInA(["operating-intro-close", "operating-intro", "operating-intro-img"], (e.target as HTMLElement).classList.value.split(" "));
-					},
+					verify: () => this._isBInA(["operating-intro-close", "operating-intro", "operating-intro-img"], target.classList.value.split(" ")),
 					handler: this.hideHelp.bind(this)
+				},
+				{
+					verify: () => target.classList.contains("option-button"),
+					handler: () => this.handleOptionClick(target as HTMLButtonElement)
 				}
 			];
 
@@ -109,11 +118,49 @@ export default class UI {
 
 	hideBoardsBox() {
 		this.doms.boards_dialog.style.visibility = "hidden";
-		this.doms.boards_container.classList.add("hien");
+		this.doms.boards_container.classList.add("hide");
 		this.doms.boards_title.textContent = "";
 		this.doms.boards_author.textContent = "";
 		this.doms.boards_describe.textContent = "";
 		this.doms.boards_img.src = "";
+	}
+
+	showQuestionBox(question: string, options: { text: string; isCorrect: boolean }[], img_src: string) {
+		if (this.doms.question_block.style.display === "flex") return;
+		this.doms.question_block.style.display = "flex";
+		this.doms.question_container.classList.remove("hide");
+		this.doms.question_text.innerText = question;
+		this.doms.question_img.src = img_src;
+		this.doms.question_result.innerText = "";
+
+		// Clear existing options
+		this.doms.question_options.innerHTML = "";
+
+		// Create buttons for each option
+		options.forEach((option, index) => {
+			const button = document.createElement("button");
+			button.classList.add("option-button");
+			button.innerText = option.text;
+			button.dataset.isCorrect = option.isCorrect.toString();
+			this.doms.question_options.appendChild(button);
+		});
+	}
+
+	hideQuestionBox() {
+		this.doms.question_block.style.display = "none";
+		this.doms.question_container.classList.add("hide");
+		this.doms.question_text.innerText = "";
+		this.doms.question_options.innerHTML = "";
+		this.doms.question_result.innerText = "";
+		this.doms.question_img.src = "";
+	}
+
+	handleOptionClick(button: HTMLButtonElement) {
+		const isCorrect = button.dataset.isCorrect === "true";
+		this.doms.question_result.innerText = isCorrect ? "Correct!" : "Incorrect!";
+		// Disable all option buttons after selection
+		const buttons = this.doms.question_options.querySelectorAll("button");
+		buttons.forEach(btn => btn.disabled = true);
 	}
 
 	showPreviewTooltip(msg: string, show_preview_tips = true) {
