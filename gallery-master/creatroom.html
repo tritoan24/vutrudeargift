@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,12 @@
       margin: 0;
       min-height: 100vh;
     }
+
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: auto;
     }
+
     form {
       background: #fff;
       padding: 32px;
@@ -23,17 +26,22 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       margin-bottom: 24px;
     }
-    h2, h3 {
+
+    h2,
+    h3 {
       color: #1a1a40;
       margin: 0 0 16px;
     }
+
     label {
       display: block;
       margin-top: 12px;
       font-weight: 600;
       color: #333;
     }
-    input, textarea {
+
+    input,
+    textarea {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
@@ -42,34 +50,164 @@
       box-sizing: border-box;
       transition: border-color 0.3s;
     }
-    input:focus, textarea:focus {
+
+    input:focus,
+    textarea:focus {
       border-color: #ff6b9d;
       outline: none;
     }
-    .board-section {
-      background: #fafafa;
-      padding: 16px;
+
+    /* Boards Grid */
+    .boards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
       margin-top: 16px;
-      border-radius: 8px;
+    }
+
+    .board-card {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
       position: relative;
-      transition: all 0.3s;
+      overflow: hidden;
     }
-    .board-section h4 {
-      margin: 0 0 12px;
-      color: #1a1a40;
+
+    .board-card:hover {
+      border-color: #ff6b9d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
-    .input-group {
+
+    .board-card.big-board {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #ff6b9d, #ff4a85);
+      color: white;
+      border-color: #ff6b9d;
+    }
+
+    .board-card.big-board .board-title {
+      color: white;
+    }
+
+    /* Ảnh preview mặc định là hình vuông */
+    .board-preview-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 8px;
       margin-bottom: 12px;
-    }
-    .input-group img {
-      max-width: 100px;
-      margin-top: 8px;
-      border-radius: 4px;
-      display: none;
-    }
-    .input-group img.show {
+      height: auto;
       display: block;
     }
+
+    /* Ảnh preview cho big board là hình chữ nhật ngang */
+    .big-board .board-preview-img {
+      aspect-ratio: 5/3;
+      /* hoặc 16/9, tuỳ ý bạn */
+      height: auto;
+    }
+
+    .board-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a40;
+      margin-bottom: 8px;
+    }
+
+    .board-author {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .board-desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .board-id {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .big-board .board-id {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Dialog Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal.show {
+      display: block;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 32px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      animation: slideIn 0.3s ease;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close:hover {
+      color: #ff6b9d;
+    }
+
+    .modal-preview-img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .modal-preview-img.show {
+      display: block;
+    }
+
     button {
       padding: 12px 24px;
       background: #ff6b9d;
@@ -81,48 +219,48 @@
       transition: background 0.3s;
       margin-right: 8px;
     }
+
     button:hover {
       background: #ff4a85;
     }
+
     button.secondary {
       background: #6c757d;
     }
+
     button.secondary:hover {
       background: #5a6268;
     }
-    .remove-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: #ff4d4d;
-      padding: 6px 12px;
-      font-size: 14px;
-    }
+
     #result {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 24px auto;
       padding: 16px;
       border-radius: 8px;
       background: #e9ffe9;
     }
+
     .error {
       background: #ffe9e9;
       color: red;
       padding: 12px;
       border-radius: 6px;
     }
+
     .success {
       background: #e9ffe9;
       color: green;
       padding: 12px;
       border-radius: 6px;
     }
+
     pre {
       background: #f4f4f4;
       padding: 12px;
       border-radius: 6px;
       overflow-x: auto;
     }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -135,124 +273,267 @@
       transition: opacity 0.3s;
       z-index: 1000;
     }
+
     .toast.show {
       opacity: 1;
     }
+
     .toast.error {
       background: #ff4d4d;
     }
+
     .toast.success {
       background: #28a745;
     }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .boards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+
+      .board-card.big-board {
+        grid-column: span 1;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+        margin: 10% auto;
+      }
+    }
+
     @media (max-width: 600px) {
-      form, #result {
+
+      form,
+      #result {
         padding: 16px;
       }
+
       .container {
         padding: 16px;
       }
     }
+
+    #boardTypeLabel {
+      font-weight: 600;
+      z-index: 2;
+      background: #fff;
+      padding: 4px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    #boardTypeLabel select {
+      margin-left: 8px;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <form id="roomForm">
       <h2>Tạo phòng mới</h2>
-      <label>Chủ phòng (owner)
-        <input type="text" name="owner" required placeholder="Nhập tên chủ phòng">
-      </label>
-      <label>Tiêu đề phòng (title)
-        <input type="text" name="title" required placeholder="Nhập tiêu đề phòng">
-      </label>
+
       <label>Mô tả phòng (description)
         <textarea name="description" rows="3" placeholder="Nhập mô tả phòng"></textarea>
       </label>
-      <h3>Danh sách boards
-        <button type="button" id="addBoard" class="secondary">Thêm board</button>
-      </h3>
-      <div id="boardsContainer"></div>
-      <button type="submit">Tạo phòng</button>
+
+      <h3>Danh sách boards (Click để chỉnh sửa)</h3>
+      <div id="boardsGrid" class="boards-grid"></div>
+
+      <button type="submit" style="margin-top: 24px;">Tạo phòng</button>
       <button type="button" id="resetForm" class="secondary">Đặt lại</button>
     </form>
+
     <div id="result"></div>
     <div id="toast" class="toast"></div>
   </div>
 
-  <script>
-    // Hàm tạo giao diện cho board
-    function createBoardInput(id, isBig = false, isRemovable = false) {
-      const container = document.createElement('div');
-      container.className = 'board-section';
-      container.dataset.id = id;
-      container.innerHTML = `
-        <h4>${isBig ? 'Big Board' : `Board ${id}`}</h4>
-        <div class="input-group">
+  <!-- Modal Dialog -->
+  <div id="boardModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle">Chỉnh sửa Board</h3>
+      <form id="boardEditForm" style="position:relative;">
+        <!-- Spinner lên đầu, thêm class để định vị -->
+        <label id="boardTypeLabel" style="position:absolute; top:0; right:0; margin:16px 24px 0 0;">
+          Loại board
+          <select id="boardType">
+            <option value="info">Thông tin</option>
+            <option value="question">Câu hỏi</option>
+          </select>
+        </label>
+        <input type="hidden" id="editingBoardId">
+
+        <!-- Bọc các trường này lại -->
+        <div id="infoFields">
           <label>Tiêu đề
-            <input type="text" name="board-title-${id}" required value="Tiêu đề ${isBig ? 'Big' : id}" placeholder="Nhập tiêu đề">
+            <input type="text" id="boardTitle" required placeholder="Nhập tiêu đề">
           </label>
-        </div>
-        <div class="input-group">
-          <label>Tác giả
-            <input type="text" name="board-author-${id}" required value="A" placeholder="Nhập tên tác giả">
-          </label>
-        </div>
-        <div class="input-group">
+
           <label>Mô tả
-            <textarea name="board-desc-${id}" rows="2" placeholder="Nhập mô tả">desc${isBig ? 'Big' : id}</textarea>
+            <textarea id="boardDesc" rows="3" placeholder="Nhập mô tả"></textarea>
           </label>
         </div>
-        <div class="input-group">
-          <label>URL hình ảnh
-            <input type="url" name="board-img-${id}" required value="https://res.cloudinary.com/dtcyfyauk/image/upload/v1750149325/p40m8sebwmlpjns4bugf.jpg" placeholder="Nhập URL hình ảnh">
-            <img src="" alt="Preview" class="preview-img">
+
+        <label>URL hình ảnh
+          <input type="url" id="boardImg" required placeholder="Nhập URL hình ảnh">
+          <img id="modalPreviewImg" class="modal-preview-img" alt="Preview">
+        </label>
+
+        <!-- Thêm spinner chọn type -->
+
+        <!-- Thêm form nhập câu hỏi và đáp án, mặc định ẩn -->
+        <div id="questionFields" style="display:none;">
+          <label>Câu hỏi
+            <input type="text" id="boardQuestion" placeholder="Nhập câu hỏi">
+          </label>
+          <label>Đáp án
+            <div id="optionsList"></div>
+            <button type="button" id="addOptionBtn">Thêm đáp án</button>
           </label>
         </div>
-        ${isRemovable ? '<button type="button" class="remove-btn">Xóa</button>' : ''}
-      `;
-      // Preview hình ảnh
-      const imgInput = container.querySelector(`[name="board-img-${id}"]`);
-      const imgPreview = container.querySelector('.preview-img');
-      imgInput.addEventListener('input', () => {
-        imgPreview.src = imgInput.value;
-        imgPreview.classList.toggle('show', imgInput.value);
-      });
-      imgPreview.src = imgInput.value;
-      imgPreview.classList.add('show');
-      // Xử lý xóa board
-      if (isRemovable) {
-        container.querySelector('.remove-btn').addEventListener('click', () => {
-          container.remove();
-        });
-      }
-      return container;
-    }
 
-    // Khởi tạo boards
-    const boardsContainer = document.getElementById('boardsContainer');
-    let boardCount = 10;
-    for (let i = 1; i <= 10; i++) {
-      boardsContainer.appendChild(createBoardInput(i));
-    }
-    boardsContainer.appendChild(createBoardInput('big', true));
+        <div style="margin-top: 20px;">
+          <button type="submit">Lưu thay đổi</button>
+          <button type="button" id="cancelEdit" class="secondary">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    // Thêm board mới
-    document.getElementById('addBoard').addEventListener('click', () => {
-      boardCount++;
-      boardsContainer.appendChild(createBoardInput(boardCount, false, true));
-      showToast('Đã thêm board mới!', 'success');
-    });
+  <script>
+    // Dữ liệu boards
+    let boardsData = {};
 
-    // Reset form
-    document.getElementById('resetForm').addEventListener('click', () => {
-      document.getElementById('roomForm').reset();
-      boardsContainer.innerHTML = '';
-      boardCount = 10;
+    // Khởi tạo dữ liệu mặc định
+    function initializeBoards() {
       for (let i = 1; i <= 10; i++) {
-        boardsContainer.appendChild(createBoardInput(i));
+        boardsData[i] = {
+          id: i,
+          type: 'info',
+          title: `Tiêu đề ${i}`,
+          author: 'A',
+          describe: `desc${i}`,
+          img: 'https://res.cloudinary.com/dtcyfyauk/image/upload/v1750149325/p40m8sebwmlpjns4bugf.jpg'
+        };
       }
-      boardsContainer.appendChild(createBoardInput('big', true));
-      showToast('Đã đặt lại form!', 'success');
-    });
+      boardsData['big'] = {
+        id: 'big',
+        type: 'info',
+        title: 'Tiêu đề Big',
+        author: 'A',
+        describe: 'descBig',
+        img: 'https://res.cloudinary.com/dtcyfyauk/image/upload/v1750149325/p40m8sebwmlpjns4bugf.jpg'
+      };
+    }
+
+    // Render boards grid
+    function renderBoardsGrid() {
+      const grid = document.getElementById('boardsGrid');
+      grid.innerHTML = '';
+
+      Object.values(boardsData).forEach(board => {
+        const card = document.createElement('div');
+        card.className = `board-card ${board.id === 'big' ? 'big-board' : ''}`;
+        card.dataset.boardId = board.id;
+
+        if (board.id === 'big') {
+          card.innerHTML = `
+            <div class="board-id">BIG</div>
+            <img src="${board.img}" alt="Board image" class="board-preview-img">
+          `;
+        } else if (board.type === 'question') {
+          card.innerHTML = `
+            <div class="board-id">${board.id}</div>
+            <img src="${board.img}" alt="Board image" class="board-preview-img">
+            <div class="board-question" style="font-weight:bold;margin-top:8px;">${board.question || ''}</div>
+            <ul class="board-options" style="margin:8px 0 0 0;padding-left:18px;">
+              ${Array.isArray(board.options) ? board.options.map(opt => `
+                <li${opt.isCorrect ? ' style="color:green;font-weight:bold;"' : ''}>${opt.text}</li>
+              `).join('') : ''}
+            </ul>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="board-id">${board.id}</div>
+            <img src="${board.img}" alt="Board image" class="board-preview-img">
+            <div class="board-title">${board.title}</div>
+            <div class="board-desc">${board.describe}</div>
+          `;
+        }
+
+        card.addEventListener('click', () => openBoardModal(board.id));
+        grid.appendChild(card);
+      });
+    }
+
+    // Mở modal chỉnh sửa board
+    function openBoardModal(boardId) {
+      const board = boardsData[boardId];
+      const modal = document.getElementById('boardModal');
+
+      document.getElementById('modalTitle').textContent = `Chỉnh sửa Board ${boardId === 'big' ? 'Big' : boardId}`;
+      document.getElementById('editingBoardId').value = boardId;
+      document.getElementById('boardImg').value = board.img;
+      document.getElementById('modalPreviewImg').src = board.img;
+      document.getElementById('modalPreviewImg').classList.add('show');
+
+      const titleInput = document.getElementById('boardTitle');
+      const descInput = document.getElementById('boardDesc');
+
+      // Nếu là big, chỉ show ảnh, ẩn các trường khác
+      if (boardId === 'big') {
+        document.getElementById('boardTypeLabel').style.display = 'none';
+        document.getElementById('infoFields').style.display = 'none';
+        document.getElementById('questionFields').style.display = 'none';
+        // BỎ required khi mở modal cho big
+        titleInput.required = false;
+        descInput.required = false;
+      } else {
+        document.getElementById('boardTypeLabel').style.display = '';
+        document.getElementById('infoFields').style.display = board.type === 'question' ? 'none' : '';
+        document.getElementById('questionFields').style.display = board.type === 'question' ? '' : 'none';
+        document.getElementById('boardType').value = board.type || 'info';
+        document.getElementById('boardTitle').value = board.title;
+        document.getElementById('boardDesc').value = board.describe;
+        document.getElementById('boardQuestion').value = board.question || '';
+        renderOptionsList(board.options || []);
+        // Đặt lại required cho trường info nếu cần
+        titleInput.required = board.type !== 'question';
+        descInput.required = false; // hoặc true nếu bạn muốn
+      }
+
+      modal.classList.add('show');
+    }
+
+    // Đóng modal
+    function closeModal() {
+      document.getElementById('boardModal').classList.remove('show');
+    }
 
     // Toast notification
     function showToast(message, type) {
@@ -264,46 +545,195 @@
       }, 3000);
     }
 
-    // Xử lý form submit
-    document.getElementById('roomForm').onsubmit = async function(e) {
+    // Quản lý danh sách đáp án
+    function renderOptionsList(options) {
+      const list = document.getElementById('optionsList');
+      list.innerHTML = '';
+      options.forEach((opt, idx) => {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.marginBottom = '4px';
+        div.innerHTML = `
+          <input type="text" value="${opt.text}" data-idx="${idx}" style="flex:1;margin-right:8px;" placeholder="Đáp án">
+          <label style="margin-right:8px;">
+            <input type="radio" name="isCorrect" value="${idx}" ${opt.isCorrect ? 'checked' : ''}> Đúng
+          </label>
+          <button type="button" data-remove="${idx}">X</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeBoards();
+      renderBoardsGrid();
+    });
+
+    // Modal controls
+    document.querySelector('.close').addEventListener('click', closeModal);
+    document.getElementById('cancelEdit').addEventListener('click', closeModal);
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('boardModal')) {
+        closeModal();
+      }
+    });
+
+    // Preview image in modal
+    document.getElementById('boardImg').addEventListener('input', (e) => {
+      const img = document.getElementById('modalPreviewImg');
+      img.src = e.target.value;
+      img.classList.toggle('show', e.target.value);
+    });
+
+    // Thêm đáp án mới
+    document.getElementById('addOptionBtn').addEventListener('click', () => {
+      const options = getCurrentOptions();
+      options.push({ text: '', isCorrect: false });
+      renderOptionsList(options);
+    });
+
+    // Lấy danh sách đáp án hiện tại từ DOM
+    function getCurrentOptions() {
+      const list = document.getElementById('optionsList');
+      const inputs = list.querySelectorAll('input[type="text"]');
+      const radios = list.querySelectorAll('input[type="radio"][name="isCorrect"]');
+      let options = [];
+      inputs.forEach((input, idx) => {
+        options.push({
+          text: input.value,
+          isCorrect: radios[idx] && radios[idx].checked
+        });
+      });
+      // Đánh dấu đúng đáp án được chọn
+      const checkedRadio = list.querySelector('input[type="radio"][name="isCorrect"]:checked');
+      if (checkedRadio) {
+        const idx = parseInt(checkedRadio.value);
+        options = options.map((opt, i) => ({ ...opt, isCorrect: i === idx }));
+      }
+      return options;
+    }
+
+    // Xóa đáp án
+    document.getElementById('optionsList').addEventListener('click', function (e) {
+      if (e.target.tagName === 'BUTTON' && e.target.dataset.remove !== undefined) {
+        const idx = parseInt(e.target.dataset.remove);
+        const options = getCurrentOptions();
+        options.splice(idx, 1);
+        renderOptionsList(options);
+      }
+    });
+
+    // Save board changes
+    document.getElementById('boardEditForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const boardId = document.getElementById('editingBoardId').value;
+      const imgUrl = document.getElementById('boardImg').value;
+
+      // Validate image URL
+      if (!imgUrl.match(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
+        showToast('URL hình ảnh không hợp lệ!', 'error');
+        return;
+      }
+
+      if (boardId === 'big') {
+        // Set mặc định cho big
+        boardsData[boardId] = {
+          ...boardsData[boardId],
+          title: "Board Big",
+          author: "",
+          describe: "Đây là board lớn đặc biệt.",
+          img: imgUrl,
+          type: "info",
+          question: undefined,
+          options: []
+        };
+      } else {
+        const type = document.getElementById('boardType').value;
+        let question = '';
+        let options = [];
+        if (type === 'question') {
+          question = document.getElementById('boardQuestion').value;
+          options = getCurrentOptions();
+          if (!question.trim()) {
+            showToast('Câu hỏi không được để trống!', 'error');
+            return;
+          }
+          if (options.length < 2) {
+            showToast('Phải có ít nhất 2 đáp án!', 'error');
+            return;
+          }
+          if (!options.some(opt => opt.isCorrect)) {
+            showToast('Phải chọn một đáp án đúng!', 'error');
+            return;
+          }
+          if (options.some(opt => !opt.text.trim())) {
+            showToast('Không được để trống đáp án!', 'error');
+            return;
+          }
+        }
+
+        boardsData[boardId] = {
+          ...boardsData[boardId],
+          title: type === 'question' ? "" : document.getElementById('boardTitle').value,
+          author: "",
+          describe: type === 'question' ? "" : document.getElementById('boardDesc').value,
+          img: imgUrl,
+          type,
+          question: type === 'question' ? question : undefined,
+          options: type === 'question' ? options : []
+        };
+      }
+
+      renderBoardsGrid();
+      closeModal();
+      showToast('Đã cập nhật board thành công!', 'success');
+    });
+
+    // Reset form
+    document.getElementById('resetForm').addEventListener('click', () => {
+      document.getElementById('roomForm').reset();
+      initializeBoards();
+      renderBoardsGrid();
+      showToast('Đã đặt lại form!', 'success');
+    });
+
+    // Submit form
+    document.getElementById('roomForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
       const resultDiv = document.getElementById('result');
 
-      // Kiểm tra số lượng board
-      const boardsElements = boardsContainer.querySelectorAll('.board-section');
-      if (boardsElements.length < 11) {
+      // Validate boards data
+      const boards = Object.values(boardsData);
+      if (boards.length < 11) {
         showToast('Phải có ít nhất 10 board và 1 board big!', 'error');
         return;
       }
 
-      // Tạo mảng boards
-      const boards = [];
-      boardsElements.forEach((section) => {
-        const id = section.dataset.id;
-        const imgInput = section.querySelector(`[name="board-img-${id}"]`).value;
-        // Validate URL hình ảnh
-        if (!imgInput.match(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
-          showToast(`URL hình ảnh của board ${id} không hợp lệ!`, 'error');
-          return;
-        }
-        boards.push({
-          id: id === 'big' ? 'big' : parseInt(id),
-          type: 'info',
-          title: section.querySelector(`[name="board-title-${id}"]`).value,
-          author: section.querySelector(`[name="board-author-${id}"]`).value,
-          describe: section.querySelector(`[name="board-desc-${id}"]`).value,
-          img: imgInput
-        });
-      });
+      // Kiểm tra không board nào trống ảnh
+      if (boards.some(board => !board.img || !board.img.trim())) {
+        showToast('Tất cả các board phải có ảnh!', 'error');
+        return;
+      }
 
-      if (boards.length !== boardsElements.length) return; // Dừng nếu có lỗi validate
+      // Đảm bảo các trường required luôn tồn tại (dù là "")
+      const boardsFixed = boards.map(board => ({
+        ...board,
+        author: board.author !== undefined && board.author !== null ? board.author : "",
+        title: board.title !== undefined && board.title !== null ? board.title : "",
+        describe: board.describe !== undefined && board.describe !== null ? board.describe : ""
+      }));
 
       const data = {
-        owner: form.owner.value,
-        title: form.title.value,
+        owner: "",
+        title: "",
         description: form.description.value,
-        boards
+        boards: boardsFixed
       };
 
       resultDiv.innerText = 'Đang gửi...';
@@ -325,7 +755,29 @@
         resultDiv.innerHTML = '<div class="error">Lỗi gửi request!</div>';
         showToast('Lỗi gửi request!', 'error');
       }
-    };
+    });
+
+    // Hiển thị/ẩn trường câu hỏi khi chọn type
+    document.getElementById('boardType').addEventListener('change', function () {
+      const isQuestion = this.value === 'question';
+      document.getElementById('questionFields').style.display = isQuestion ? '' : 'none';
+      document.getElementById('infoFields').style.display = isQuestion ? 'none' : '';
+
+      const titleInput = document.getElementById('boardTitle');
+      const descInput = document.getElementById('boardDesc');
+      // Khi cần ẩn trường (ví dụ type là question hoặc board big)
+      titleInput.required = false;
+      descInput.required = false;
+      titleInput.value = "";
+      descInput.value = "";
+
+      // Khi hiện trường (ví dụ type là info)
+      if (this.value === 'info') {
+        titleInput.required = true;
+        // descInput.required = true; // nếu bạn muốn
+      }
+    });
   </script>
 </body>
+
 </html>

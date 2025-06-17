@@ -125,6 +125,7 @@ export default class Environment {
 		this.raycast_objects.push(bigBoard);
 	}
 
+	//hàm tạo phản chiếu gương
 	private _createSpecularReflection() {
 		const mirror = new Reflector(new PlaneGeometry(100, 100), {
 			textureWidth: window.innerWidth * window.devicePixelRatio,
