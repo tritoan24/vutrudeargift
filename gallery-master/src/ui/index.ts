@@ -56,7 +56,7 @@ export default class UI {
 
 	handleClick(e: MouseEvent) {
 		if (e.target instanceof HTMLElement) {
-			const target = e.target; // Store e.target as HTMLElement
+			const target = e.target;
 			const MAP_EVENT = [
 				{
 					verify: () => target.classList.contains("start"),
@@ -109,11 +109,16 @@ export default class UI {
 		if (this.doms.boards_dialog.style.visibility === "visible") return;
 		this.doms.boards_dialog.style.visibility = "visible";
 		this.doms.boards_container.classList.remove("hide");
+		this.doms.boards_container.classList.add("animate-in");
 		this.doms.boards_title.innerText = title;
 		this.doms.boards_author.innerText = author;
 		this.doms.boards_describe.innerHTML = describe;
 		this.doms.boards_img.src = img_src;
 		this.doms.boards_content.scrollTo({top: 0, left: 0, behavior: "smooth"});
+		// Remove animation class after it completes to allow re-animation
+		setTimeout(() => {
+			this.doms.boards_container.classList.remove("animate-in");
+		}, 500); // Match animation duration
 	}
 
 	hideBoardsBox() {
@@ -129,6 +134,7 @@ export default class UI {
 		if (this.doms.question_block.style.display === "flex") return;
 		this.doms.question_block.style.display = "flex";
 		this.doms.question_container.classList.remove("hide");
+		this.doms.question_container.classList.add("animate-in");
 		this.doms.question_text.innerText = question;
 		this.doms.question_img.src = img_src;
 		this.doms.question_result.innerText = "";
@@ -144,6 +150,11 @@ export default class UI {
 			button.dataset.isCorrect = option.isCorrect.toString();
 			this.doms.question_options.appendChild(button);
 		});
+
+		// Remove animation class after it completes
+		setTimeout(() => {
+			this.doms.question_container.classList.remove("animate-in");
+		}, 500); // Match animation duration
 	}
 
 	hideQuestionBox() {
@@ -157,10 +168,19 @@ export default class UI {
 
 	handleOptionClick(button: HTMLButtonElement) {
 		const isCorrect = button.dataset.isCorrect === "true";
-		this.doms.question_result.innerText = isCorrect ? "Correct!" : "Incorrect!";
-		// Disable all option buttons after selection
-		const buttons = this.doms.question_options.querySelectorAll("button");
-		buttons.forEach(btn => btn.disabled = true);
+		this.doms.question_result.innerText = isCorrect ? "Correct!" : "Incorrect, please try again!";
+		if (isCorrect) {
+			// Disable all buttons on correct answer
+			const buttons = this.doms.question_options.querySelectorAll("button");
+			buttons.forEach(btn => btn.disabled = true);
+			button.classList.add("correct");
+		} else {
+			// Add shake animation for incorrect answer
+			button.classList.add("incorrect");
+			setTimeout(() => {
+				button.classList.remove("incorrect");
+			}, 500); // Match animation duration
+		}
 	}
 
 	showPreviewTooltip(msg: string, show_preview_tips = true) {

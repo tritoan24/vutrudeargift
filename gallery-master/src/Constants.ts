@@ -127,12 +127,7 @@ export const BOARDS_INFO: Record<string, {
 	9: {
 		title: "《Ôm Ấp Yêu Thương》",
 		author: "Thjnh",
-		describe: `
-		Một cái ôm ấm áp có thể xua tan đi mọi mệt mỏi, lo âu.<br>
-		Như những chú thỏ nhỏ trong bức tranh, luôn dành cho nhau những cử chỉ yêu thương.<br>
-		Đôi khi chỉ cần một cái ôm, một lời động viên đơn giản.<br>
-		Cũng đủ để làm ấm lòng người và thắp sáng một ngày mới.
-		`,
+		describe: ``,
 		type: "question",
 		question: "Một cái ôm có thể mang lại điều gì?",
 		options: [
