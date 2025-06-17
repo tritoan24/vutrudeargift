@@ -1,6 +1,6 @@
 import Core from "../core";
 import Loader from "../loader";
-import {BOARD_TEXTURES, BOARDS_INFO, COLLISION_SCENE_URL, ON_LOAD_MODEL_FINISH, ON_LOAD_PROGRESS, STATIC_SCENE_URL} from "../Constants";
+import {BOARDS_INFO, COLLISION_SCENE_URL, ON_LOAD_MODEL_FINISH, ON_LOAD_PROGRESS, STATIC_SCENE_URL, fetchRoomBoards} from "../Constants";
 import {Group, Material, Mesh, MeshBasicMaterial, Object3D, SRGBColorSpace, Texture, PlaneGeometry, DoubleSide} from "three";
 import {isLight, isMesh} from "../utils/typeAssert";
 import {MeshBVH, MeshBVHOptions, StaticGeometryGenerator} from "three-mesh-bvh";
@@ -15,11 +15,24 @@ export default class Environment {
 	private gallery_boards: Record<string, Mesh> = {};
 	raycast_objects: Object3D[] = [];
 	is_load_finished = false;
+	private boards_info: Record<string, any> = {};
+	public audioUrl: string | null = null;
 
 	constructor() {
 		this.core = new Core();
 		this.loader = this.core.loader;
-		this._loadScenes();
+		this._init();
+	}
+
+	private async _init() {
+		try {
+			const { boards, audioUrl } = await fetchRoomBoards();
+			this.boards_info = boards;
+			this.audioUrl = audioUrl;
+			await this._loadScenes();
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	private async _loadScenes() {
@@ -37,8 +50,9 @@ export default class Environment {
 	}
 
 	private async _loadBoardsTexture(): Promise<void> {
-		for (let i = 0; i < BOARD_TEXTURES.length; i++) {
-			this.texture_boards[i + 1] = await this.loader.texture_loader.loadAsync(BOARD_TEXTURES[i]);
+		for (const key in this.boards_info) {
+			const imgUrl = this.boards_info[key].img;
+			this.texture_boards[key] = await this.loader.texture_loader.loadAsync(imgUrl);
 		}
 
 		for (const key in this.texture_boards) {
@@ -71,15 +85,9 @@ export default class Environment {
 			const board_material = board.material;
 			(board_material as MeshBasicMaterial).map = this.texture_boards[key];
 			board.userData = {
-				name: board.name,
-				title: BOARDS_INFO[key].title,
-				author: BOARDS_INFO[key].author,
-				describe: BOARDS_INFO[key].describe,
-				type: BOARDS_INFO[key].type,
-				question: BOARDS_INFO[key].question,
-				options: BOARDS_INFO[key].options,
+				...this.boards_info[key],
 				index: key,
-				src: this.texture_boards[key].image.src,
+				src: this.boards_info[key].img,
 				show_boards: true
 			};
 
@@ -94,37 +102,26 @@ export default class Environment {
 		}
 
 		// === TẠO BOARD LỚN ===
-		// Lấy texture cuối cùng trong BOARD_TEXTURES
-		const bigTexture = this.texture_boards["10"];
-		// Kích thước lớn (ví dụ: 12 x 7 mét)
+		const bigInfo = this.boards_info["big"];
+		const bigTexture = this.texture_boards["big"];
 		const bigWidth = 25;
 		const bigHeight = 15;
 
-		// Tạo board lớn
 		const bigBoard = new Mesh(
 			new PlaneGeometry(bigWidth, bigHeight),
 			new MeshBasicMaterial({ map: bigTexture, side: DoubleSide })
 		);
 
-		// Đặt vị trí board lớn (bạn có thể điều chỉnh lại cho phù hợp)
-		bigBoard.position.set(0, bigHeight / 15 + 10, 50.5); // X, Y, Z
-		bigBoard.rotation.y = Math.PI; // Quay mặt board vào tường phía sau
+		bigBoard.position.set(0, bigHeight / 15 + 10, 50.5);
+		bigBoard.rotation.y = Math.PI;
 		bigBoard.userData = {
-			name: "big_board",
-			title: BOARDS_INFO["10"].title,
-			author: BOARDS_INFO["10"].author,
-			describe: BOARDS_INFO["10"].describe,
-			type: BOARDS_INFO["10"].type,
-			question: BOARDS_INFO["10"].question,
-			options: BOARDS_INFO["10"].options,
-			index: "10",
-			src: bigTexture ? bigTexture.image.src : "",
+			...bigInfo,
+			index: "big",
+			src: bigInfo.img,
 			show_boards: true
 		};
 
 		this.core.scene.add(bigBoard);
-
-		// Nếu muốn tương tác (click/tooltip)
 		this.raycast_objects.push(bigBoard);
 	}
 

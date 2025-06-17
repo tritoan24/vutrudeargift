@@ -12,7 +12,7 @@ export default class World {
 	private environment: Environment;
 	private character: Character;
 	private css_3d_renderer: Css3DRenderer;
-	private audio: Audio;
+	private audio: Audio | null = null;
 	private ray_caster_controls: RayCasterControls;
 
 	constructor() {
@@ -28,8 +28,8 @@ export default class World {
 		this.environment = new Environment();
 		this.character = new Character({speed: 12});
 		this.css_3d_renderer = new Css3DRenderer();
-		this.audio = new Audio();
 		this.ray_caster_controls = new RayCasterControls();
+		// KHÔNG tạo Audio ở đây!
 	}
 
 	update(delta: number) {
@@ -44,13 +44,14 @@ export default class World {
 	* Callback khi click vào để vào triển lãm
 	* */
 	private _onEnterApp() {
-		this.audio.playAudio();
+		this.audio?.playAudio();
 		//Callback khi click vào để vào triển lãm
 		this.core.control_manage.enabled();
 	}
 
 	private async _onLoadModelFinish() {
-		// Sau khi mô hình cảnh được tải xong thì bắt đầu tải âm thanh
+		// Tạo Audio sau khi Environment đã load xong và có audioUrl
+		this.audio = new Audio(this.environment.audioUrl);
 		await this.audio.createAudio();
 
 		// Sau khi âm thanh tải xong thì xóa UI tiến trình tải, hiển thị UI xác nhận vào

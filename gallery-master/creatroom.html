@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo phòng mới</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #e0e7ff);
+      padding: 40px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    form {
+      background: #fff;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 24px;
+    }
+    h2, h3 {
+      color: #1a1a40;
+      margin: 0 0 16px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: #ff6b9d;
+      outline: none;
+    }
+    .board-section {
+      background: #fafafa;
+      padding: 16px;
+      margin-top: 16px;
+      border-radius: 8px;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .board-section h4 {
+      margin: 0 0 12px;
+      color: #1a1a40;
+    }
+    .input-group {
+      margin-bottom: 12px;
+    }
+    .input-group img {
+      max-width: 100px;
+      margin-top: 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    .input-group img.show {
+      display: block;
+    }
+    button {
+      padding: 12px 24px;
+      background: #ff6b9d;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      margin-right: 8px;
+    }
+    button:hover {
+      background: #ff4a85;
+    }
+    button.secondary {
+      background: #6c757d;
+    }
+    button.secondary:hover {
+      background: #5a6268;
+    }
+    .remove-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #ff4d4d;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+    #result {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 16px;
+      border-radius: 8px;
+      background: #e9ffe9;
+    }
+    .error {
+      background: #ffe9e9;
+      color: red;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .success {
+      background: #e9ffe9;
+      color: green;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 24px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    .toast.error {
+      background: #ff4d4d;
+    }
+    .toast.success {
+      background: #28a745;
+    }
+    @media (max-width: 600px) {
+      form, #result {
+        padding: 16px;
+      }
+      .container {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="roomForm">
+      <h2>Tạo phòng mới</h2>
+      <label>Chủ phòng (owner)
+        <input type="text" name="owner" required placeholder="Nhập tên chủ phòng">
+      </label>
+      <label>Tiêu đề phòng (title)
+        <input type="text" name="title" required placeholder="Nhập tiêu đề phòng">
+      </label>
+      <label>Mô tả phòng (description)
+        <textarea name="description" rows="3" placeholder="Nhập mô tả phòng"></textarea>
+      </label>
+      <h3>Danh sách boards
+        <button type="button" id="addBoard" class="secondary">Thêm board</button>
+      </h3>
+      <div id="boardsContainer"></div>
+      <button type="submit">Tạo phòng</button>
+      <button type="button" id="resetForm" class="secondary">Đặt lại</button>
+    </form>
+    <div id="result"></div>
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script>
+    // Hàm tạo giao diện cho board
+    function createBoardInput(id, isBig = false, isRemovable = false) {
+      const container = document.createElement('div');
+      container.className = 'board-section';
+      container.dataset.id = id;
+      container.innerHTML = `
+        <h4>${isBig ? 'Big Board' : `Board ${id}`}</h4>
+        <div class="input-group">
+          <label>Tiêu đề
+            <input type="text" name="board-title-${id}" required value="Tiêu đề ${isBig ? 'Big' : id}" placeholder="Nhập tiêu đề">
+          </label>
+        </div>
+        <div class="input-group">
+          <label>Tác giả
+            <input type="text" name="board-author-${id}" required value="A" placeholder="Nhập tên tác giả">
+          </label>
+        </div>
+        <div class="input-group">
+          <label>Mô tả
+            <textarea name="board-desc-${id}" rows="2" placeholder="Nhập mô tả">desc${isBig ? 'Big' : id}</textarea>
+          </label>
+        </div>
+        <div class="input-group">
+          <label>URL hình ảnh
+            <input type="url" name="board-img-${id}" required value="https://res.cloudinary.com/dtcyfyauk/image/upload/v1750149325/p40m8sebwmlpjns4bugf.jpg" placeholder="Nhập URL hình ảnh">
+            <img src="" alt="Preview" class="preview-img">
+          </label>
+        </div>
+        ${isRemovable ? '<button type="button" class="remove-btn">Xóa</button>' : ''}
+      `;
+      // Preview hình ảnh
+      const imgInput = container.querySelector(`[name="board-img-${id}"]`);
+      const imgPreview = container.querySelector('.preview-img');
+      imgInput.addEventListener('input', () => {
+        imgPreview.src = imgInput.value;
+        imgPreview.classList.toggle('show', imgInput.value);
+      });
+      imgPreview.src = imgInput.value;
+      imgPreview.classList.add('show');
+      // Xử lý xóa board
+      if (isRemovable) {
+        container.querySelector('.remove-btn').addEventListener('click', () => {
+          container.remove();
+        });
+      }
+      return container;
+    }
+
+    // Khởi tạo boards
+    const boardsContainer = document.getElementById('boardsContainer');
+    let boardCount = 10;
+    for (let i = 1; i <= 10; i++) {
+      boardsContainer.appendChild(createBoardInput(i));
+    }
+    boardsContainer.appendChild(createBoardInput('big', true));
+
+    // Thêm board mới
+    document.getElementById('addBoard').addEventListener('click', () => {
+      boardCount++;
+      boardsContainer.appendChild(createBoardInput(boardCount, false, true));
+      showToast('Đã thêm board mới!', 'success');
+    });
+
+    // Reset form
+    document.getElementById('resetForm').addEventListener('click', () => {
+      document.getElementById('roomForm').reset();
+      boardsContainer.innerHTML = '';
+      boardCount = 10;
+      for (let i = 1; i <= 10; i++) {
+        boardsContainer.appendChild(createBoardInput(i));
+      }
+      boardsContainer.appendChild(createBoardInput('big', true));
+      showToast('Đã đặt lại form!', 'success');
+    });
+
+    // Toast notification
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => {
+        toast.className = `toast ${type}`;
+      }, 3000);
+    }
+
+    // Xử lý form submit
+    document.getElementById('roomForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const resultDiv = document.getElementById('result');
+
+      // Kiểm tra số lượng board
+      const boardsElements = boardsContainer.querySelectorAll('.board-section');
+      if (boardsElements.length < 11) {
+        showToast('Phải có ít nhất 10 board và 1 board big!', 'error');
+        return;
+      }
+
+      // Tạo mảng boards
+      const boards = [];
+      boardsElements.forEach((section) => {
+        const id = section.dataset.id;
+        const imgInput = section.querySelector(`[name="board-img-${id}"]`).value;
+        // Validate URL hình ảnh
+        if (!imgInput.match(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
+          showToast(`URL hình ảnh của board ${id} không hợp lệ!`, 'error');
+          return;
+        }
+        boards.push({
+          id: id === 'big' ? 'big' : parseInt(id),
+          type: 'info',
+          title: section.querySelector(`[name="board-title-${id}"]`).value,
+          author: section.querySelector(`[name="board-author-${id}"]`).value,
+          describe: section.querySelector(`[name="board-desc-${id}"]`).value,
+          img: imgInput
+        });
+      });
+
+      if (boards.length !== boardsElements.length) return; // Dừng nếu có lỗi validate
+
+      const data = {
+        owner: form.owner.value,
+        title: form.title.value,
+        description: form.description.value,
+        boards
+      };
+
+      resultDiv.innerText = 'Đang gửi...';
+      try {
+        const res = await fetch('https://dearlove-backend.onrender.com/api/boards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (res.ok) {
+          resultDiv.innerHTML = '<div class="success">Tạo phòng thành công!</div><pre>' + JSON.stringify(result, null, 2) + '</pre>';
+          showToast('Tạo phòng thành công!', 'success');
+        } else {
+          resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
+          showToast('Lỗi khi tạo phòng!', 'error');
+        }
+      } catch (err) {
+        resultDiv.innerHTML = '<div class="error">Lỗi gửi request!</div>';
+        showToast('Lỗi gửi request!', 'error');
+      }
+    };
+  </script>
+</body>
+</html>

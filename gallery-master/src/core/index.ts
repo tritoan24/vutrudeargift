@@ -20,6 +20,8 @@ export default class Core extends Emitter {
 	loader!: Loader;
 	world!: World;
 
+	audioUrl: string | null = null;
+
 	constructor() {
 		super();
 
