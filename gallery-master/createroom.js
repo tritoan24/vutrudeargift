@@ -1,42 +1,42 @@
 // Dữ liệu boards
-    let boardsData = {};
+let boardsData = {};
 
-    // Khởi tạo dữ liệu mặc định
-    function initializeBoards() {
+// Khởi tạo dữ liệu mặc định
+function initializeBoards() {
   const defaultBoards = [
-    {"id":1,"type":"info","title":"Tiêu đề 1","author":"A","describe":"desc1","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"},
-    {"id":2,"type":"info","title":"Tiêu đề 2","author":"A","describe":"desc2","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"},
-    {"id":3,"type":"info","title":"Tiêu đề 3","author":"A","describe":"desc3","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"},
-    {"id":4,"type":"info","title":"Tiêu đề 4","author":"A","describe":"desc4","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"},
-    {"id":5,"type":"info","title":"Tiêu đề 5","author":"A","describe":"desc5","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"},
-    {"id":6,"type":"info","title":"Tiêu đề 6","author":"A","describe":"desc6","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506721829_2572655879735450_7494319516091871888_n_ig5x6r.jpg"},
-    {"id":7,"type":"info","title":"Tiêu đề 7","author":"A","describe":"desc7","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506721829_2572655879735450_7494319516091871888_n_ig5x6r.jpg"},
-    {"id":8,"type":"info","title":"Tiêu đề 8","author":"A","describe":"desc8","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg"},
-    {"id":9,"type":"info","title":"Tiêu đề 9","author":"A","describe":"desc9","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg"},
-    {"id":10,"type":"info","title":"Tiêu đề 10","author":"A","describe":"desc10","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg"},
-    {"id":"big","type":"info","title":"Big Board","author":"A","describe":"descBig","img":"https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg"}
+    { "id": 1, "type": "info", "title": "Tiêu đề 1", "author": "A", "describe": "desc1", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" },
+    { "id": 2, "type": "info", "title": "Tiêu đề 2", "author": "A", "describe": "desc2", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" },
+    { "id": 3, "type": "info", "title": "Tiêu đề 3", "author": "A", "describe": "desc3", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" },
+    { "id": 4, "type": "info", "title": "Tiêu đề 4", "author": "A", "describe": "desc4", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" },
+    { "id": 5, "type": "info", "title": "Tiêu đề 5", "author": "A", "describe": "desc5", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" },
+    { "id": 6, "type": "info", "title": "Tiêu đề 6", "author": "A", "describe": "desc6", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506721829_2572655879735450_7494319516091871888_n_ig5x6r.jpg" },
+    { "id": 7, "type": "info", "title": "Tiêu đề 7", "author": "A", "describe": "desc7", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506721829_2572655879735450_7494319516091871888_n_ig5x6r.jpg" },
+    { "id": 8, "type": "info", "title": "Tiêu đề 8", "author": "A", "describe": "desc8", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg" },
+    { "id": 9, "type": "info", "title": "Tiêu đề 9", "author": "A", "describe": "desc9", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg" },
+    { "id": 10, "type": "info", "title": "Tiêu đề 10", "author": "A", "describe": "desc10", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/506706216_1856356138274659_389963989426953356_n_n3dnw0.jpg" },
+    { "id": "big", "type": "info", "title": "Big Board", "author": "A", "describe": "descBig", "img": "https://res.cloudinary.com/doxjecoz9/image/upload/v1750180582/507075854_2829760993892440_5498859949028365776_n_uev2as.jpg" }
   ];
   boardsData = {};
   defaultBoards.forEach(b => boardsData[b.id] = b);
 }
 
-    // Render boards grid
-    function renderBoardsGrid() {
-      const grid = document.getElementById('boardsGrid');
-      grid.innerHTML = '';
+// Render boards grid
+function renderBoardsGrid() {
+  const grid = document.getElementById('boardsGrid');
+  grid.innerHTML = '';
 
-      Object.values(boardsData).forEach(board => {
-        const card = document.createElement('div');
-        card.className = `board-card ${board.id === 'big' ? 'big-board' : ''}`;
-        card.dataset.boardId = board.id;
+  Object.values(boardsData).forEach(board => {
+    const card = document.createElement('div');
+    card.className = `board-card ${board.id === 'big' ? 'big-board' : ''}`;
+    card.dataset.boardId = board.id;
 
-        if (board.id === 'big') {
-          card.innerHTML = `
+    if (board.id === 'big') {
+      card.innerHTML = `
             <div class="board-id">BIG</div>
             <img src="${board.img}" alt="Board image" class="board-preview-img">
           `;
-        } else if (board.type === 'question') {
-          card.innerHTML = `
+    } else if (board.type === 'question') {
+      card.innerHTML = `
             <div class="board-id">${board.id}</div>
             <img src="${board.img}" alt="Board image" class="board-preview-img">
             <div class="board-question" style="font-weight:bold;margin-top:8px;">${board.question || ''}</div>
@@ -46,255 +46,255 @@
               `).join('') : ''}
             </ul>
           `;
-        } else {
-          card.innerHTML = `
+    } else {
+      card.innerHTML = `
             <div class="board-id">${board.id}</div>
             <img src="${board.img}" alt="Board image" class="board-preview-img">
             <div class="board-title">${board.title}</div>
             <div class="board-desc">${board.describe}</div>
           `;
-        }
-
-        card.addEventListener('click', () => openBoardModal(board.id));
-        grid.appendChild(card);
-      });
     }
 
-    // Mở modal chỉnh sửa board
-    function openBoardModal(boardId) {
-      const board = boardsData[boardId];
-      const modal = document.getElementById('boardModal');
+    card.addEventListener('click', () => openBoardModal(board.id));
+    grid.appendChild(card);
+  });
+}
 
-      document.getElementById('modalTitle').textContent = `Chỉnh sửa Board ${boardId === 'big' ? 'Big' : boardId}`;
-      document.getElementById('editingBoardId').value = boardId;
-      // document.getElementById('boardImg').value = board.img;
-      document.getElementById('boardImgFile').value = "";
-      const img = document.getElementById('modalPreviewImg');
-      img.src = board.img || "";
-      img.classList.toggle('show', !!board.img);
-      img.dataset.local = ""; // reset
+// Mở modal chỉnh sửa board
+function openBoardModal(boardId) {
+  const board = boardsData[boardId];
+  const modal = document.getElementById('boardModal');
 
-      const titleInput = document.getElementById('boardTitle');
-      const descInput = document.getElementById('boardDesc');
+  document.getElementById('modalTitle').textContent = `Chỉnh sửa Board ${boardId === 'big' ? 'Big' : boardId}`;
+  document.getElementById('editingBoardId').value = boardId;
+  // document.getElementById('boardImg').value = board.img;
+  document.getElementById('boardImgFile').value = "";
+  const img = document.getElementById('modalPreviewImg');
+  img.src = board.img || "";
+  img.classList.toggle('show', !!board.img);
+  img.dataset.local = ""; // reset
 
-      // Nếu là big, chỉ show ảnh, ẩn các trường khác
-      if (boardId === 'big') {
-        document.getElementById('boardTypeLabel').style.display = 'none';
-        document.getElementById('infoFields').style.display = 'none';
-        document.getElementById('questionFields').style.display = 'none';
-        // BỎ required khi mở modal cho big
-        titleInput.required = false;
-        descInput.required = false;
-      } else {
-        document.getElementById('boardTypeLabel').style.display = '';
-        document.getElementById('infoFields').style.display = board.type === 'question' ? 'none' : '';
-        document.getElementById('questionFields').style.display = board.type === 'question' ? '' : 'none';
-        document.getElementById('boardType').value = board.type || 'info';
-        document.getElementById('boardTitle').value = board.title;
-        document.getElementById('boardDesc').value = board.describe;
-        document.getElementById('boardQuestion').value = board.question || '';
-        renderOptionsList(board.options || []);
-        // Đặt lại required cho trường info nếu cần
-        titleInput.required = board.type !== 'question';
-        descInput.required = false; // hoặc true nếu bạn muốn
-      }
+  const titleInput = document.getElementById('boardTitle');
+  const descInput = document.getElementById('boardDesc');
 
-      modal.classList.add('show');
-    }
+  // Nếu là big, chỉ show ảnh, ẩn các trường khác
+  if (boardId === 'big') {
+    document.getElementById('boardTypeLabel').style.display = 'none';
+    document.getElementById('infoFields').style.display = 'none';
+    document.getElementById('questionFields').style.display = 'none';
+    // BỎ required khi mở modal cho big
+    titleInput.required = false;
+    descInput.required = false;
+  } else {
+    document.getElementById('boardTypeLabel').style.display = '';
+    document.getElementById('infoFields').style.display = board.type === 'question' ? 'none' : '';
+    document.getElementById('questionFields').style.display = board.type === 'question' ? '' : 'none';
+    document.getElementById('boardType').value = board.type || 'info';
+    document.getElementById('boardTitle').value = board.title;
+    document.getElementById('boardDesc').value = board.describe;
+    document.getElementById('boardQuestion').value = board.question || '';
+    renderOptionsList(board.options || []);
+    // Đặt lại required cho trường info nếu cần
+    titleInput.required = board.type !== 'question';
+    descInput.required = false; // hoặc true nếu bạn muốn
+  }
 
-    // Đóng modal
-    function closeModal() {
-      document.getElementById('boardModal').classList.remove('show');
-    }
+  modal.classList.add('show');
+}
 
-    // Toast notification
-    function showToast(message, type) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
-      setTimeout(() => {
-        toast.className = `toast ${type}`;
-      }, 3000);
-    }
+// Đóng modal
+function closeModal() {
+  document.getElementById('boardModal').classList.remove('show');
+}
 
-    // Quản lý danh sách đáp án
-    function renderOptionsList(options) {
-      const list = document.getElementById('optionsList');
-      list.innerHTML = '';
-      options.forEach((opt, idx) => {
-        const div = document.createElement('div');
-        div.style.display = 'flex';
-        div.style.alignItems = 'center';
-        div.style.marginBottom = '4px';
-        div.innerHTML = `
+// Toast notification
+function showToast(message, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => {
+    toast.className = `toast ${type}`;
+  }, 3000);
+}
+
+// Quản lý danh sách đáp án
+function renderOptionsList(options) {
+  const list = document.getElementById('optionsList');
+  list.innerHTML = '';
+  options.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.style.display = 'flex';
+    div.style.alignItems = 'center';
+    div.style.marginBottom = '4px';
+    div.innerHTML = `
           <input type="text" value="${opt.text}" data-idx="${idx}" style="flex:1;margin-right:8px;" placeholder="Đáp án">
           <label style="margin-right:8px;">
             <input type="radio" name="isCorrect" value="${idx}" ${opt.isCorrect ? 'checked' : ''}> Đúng
           </label>
           <button type="button" data-remove="${idx}">X</button>
         `;
-        list.appendChild(div);
-      });
-    }
-
-    // Event listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeBoards();
-      renderBoardsGrid();
-    });
-
-    // Modal controls
-    document.querySelector('.close').addEventListener('click', closeModal);
-    document.getElementById('cancelEdit').addEventListener('click', closeModal);
-
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-      if (e.target === document.getElementById('boardModal')) {
-        closeModal();
-      }
-    });
-
-    // Preview image in modal (dùng file thay vì URL)
-    document.getElementById('boardImgFile').addEventListener('change', (e) => {
-      const img = document.getElementById('modalPreviewImg');
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (evt) {
-          img.src = evt.target.result;
-          img.classList.add('show');
-          img.dataset.local = "1"; // Đánh dấu là ảnh local
-        };
-        reader.readAsDataURL(file);
-      } else {
-        img.src = "";
-        img.classList.remove('show');
-        img.dataset.local = "";
-      }
-    });
-
-    // Thêm đáp án mới
-    document.getElementById('addOptionBtn').addEventListener('click', () => {
-      const options = getCurrentOptions();
-      options.push({ text: '', isCorrect: false });
-      renderOptionsList(options);
-    });
-
-    // Lấy danh sách đáp án hiện tại từ DOM
-    function getCurrentOptions() {
-      const list = document.getElementById('optionsList');
-      const inputs = list.querySelectorAll('input[type="text"]');
-      const radios = list.querySelectorAll('input[type="radio"][name="isCorrect"]');
-      let options = [];
-      inputs.forEach((input, idx) => {
-        options.push({
-          text: input.value,
-          isCorrect: radios[idx] && radios[idx].checked
-        });
-      });
-      // Đánh dấu đúng đáp án được chọn
-      const checkedRadio = list.querySelector('input[type="radio"][name="isCorrect"]:checked');
-      if (checkedRadio) {
-        const idx = parseInt(checkedRadio.value);
-        options = options.map((opt, i) => ({ ...opt, isCorrect: i === idx }));
-      }
-      return options;
-    }
-
-    // Xóa đáp án
-    document.getElementById('optionsList').addEventListener('click', function (e) {
-      if (e.target.tagName === 'BUTTON' && e.target.dataset.remove !== undefined) {
-        const idx = parseInt(e.target.dataset.remove);
-        const options = getCurrentOptions();
-        options.splice(idx, 1);
-        renderOptionsList(options);
-      }
-    });
-
-    // Save board changes
-    document.getElementById('boardEditForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const boardId = document.getElementById('editingBoardId').value;
-      // const imgUrl = document.getElementById('boardImg').value;
-
-      // Validate image URL
-      const imgPreview = document.getElementById('modalPreviewImg');
-let imgUrl = boardsData[boardId]?.img || "";
-if (imgPreview.dataset.local === "1" && imgPreview.src) {
-  imgUrl = imgPreview.src; // base64
+    list.appendChild(div);
+  });
 }
 
-if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
-  showToast('Ảnh không hợp lệ!', 'error');
-  return;
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+  initializeBoards();
+  renderBoardsGrid();
+});
+
+// Modal controls
+document.querySelector('.close').addEventListener('click', closeModal);
+document.getElementById('cancelEdit').addEventListener('click', closeModal);
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+  if (e.target === document.getElementById('boardModal')) {
+    closeModal();
+  }
+});
+
+// Preview image in modal (dùng file thay vì URL)
+document.getElementById('boardImgFile').addEventListener('change', (e) => {
+  const img = document.getElementById('modalPreviewImg');
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      img.src = evt.target.result;
+      img.classList.add('show');
+      img.dataset.local = "1"; // Đánh dấu là ảnh local
+    };
+    reader.readAsDataURL(file);
+  } else {
+    img.src = "";
+    img.classList.remove('show');
+    img.dataset.local = "";
+  }
+});
+
+// Thêm đáp án mới
+document.getElementById('addOptionBtn').addEventListener('click', () => {
+  const options = getCurrentOptions();
+  options.push({ text: '', isCorrect: false });
+  renderOptionsList(options);
+});
+
+// Lấy danh sách đáp án hiện tại từ DOM
+function getCurrentOptions() {
+  const list = document.getElementById('optionsList');
+  const inputs = list.querySelectorAll('input[type="text"]');
+  const radios = list.querySelectorAll('input[type="radio"][name="isCorrect"]');
+  let options = [];
+  inputs.forEach((input, idx) => {
+    options.push({
+      text: input.value,
+      isCorrect: radios[idx] && radios[idx].checked
+    });
+  });
+  // Đánh dấu đúng đáp án được chọn
+  const checkedRadio = list.querySelector('input[type="radio"][name="isCorrect"]:checked');
+  if (checkedRadio) {
+    const idx = parseInt(checkedRadio.value);
+    options = options.map((opt, i) => ({ ...opt, isCorrect: i === idx }));
+  }
+  return options;
 }
 
-      if (boardId === 'big') {
-        // Set mặc định cho big
-        boardsData[boardId] = {
-          ...boardsData[boardId],
-          title: "Board Big",
-          author: "",
-          describe: "Đây là board lớn đặc biệt.",
-          img: imgUrl,
-          type: "info",
-          question: undefined,
-          options: []
-        };
-      } else {
-        const type = document.getElementById('boardType').value;
-        let question = '';
-        let options = [];
-        if (type === 'question') {
-          question = document.getElementById('boardQuestion').value;
-          options = getCurrentOptions();
-          if (!question.trim()) {
-            showToast('Câu hỏi không được để trống!', 'error');
-            return;
-          }
-          if (options.length < 2) {
-            showToast('Phải có ít nhất 2 đáp án!', 'error');
-            return;
-          }
-          if (!options.some(opt => opt.isCorrect)) {
-            showToast('Phải chọn một đáp án đúng!', 'error');
-            return;
-          }
-          if (options.some(opt => !opt.text.trim())) {
-            showToast('Không được để trống đáp án!', 'error');
-            return;
-          }
-        }
+// Xóa đáp án
+document.getElementById('optionsList').addEventListener('click', function (e) {
+  if (e.target.tagName === 'BUTTON' && e.target.dataset.remove !== undefined) {
+    const idx = parseInt(e.target.dataset.remove);
+    const options = getCurrentOptions();
+    options.splice(idx, 1);
+    renderOptionsList(options);
+  }
+});
 
-        boardsData[boardId] = {
-          ...boardsData[boardId],
-          title: type === 'question' ? "" : document.getElementById('boardTitle').value,
-          author: "",
-          describe: type === 'question' ? "" : document.getElementById('boardDesc').value,
-          img: imgUrl,
-          type,
-          question: type === 'question' ? question : undefined,
-          options: type === 'question' ? options : []
-        };
+// Save board changes
+document.getElementById('boardEditForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const boardId = document.getElementById('editingBoardId').value;
+  // const imgUrl = document.getElementById('boardImg').value;
+
+  // Validate image URL
+  const imgPreview = document.getElementById('modalPreviewImg');
+  let imgUrl = boardsData[boardId]?.img || "";
+  if (imgPreview.dataset.local === "1" && imgPreview.src) {
+    imgUrl = imgPreview.src; // base64
+  }
+
+  if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
+    showToast('Ảnh không hợp lệ!', 'error');
+    return;
+  }
+
+  if (boardId === 'big') {
+    // Set mặc định cho big
+    boardsData[boardId] = {
+      ...boardsData[boardId],
+      title: "Board Big",
+      author: "",
+      describe: "Đây là board lớn đặc biệt.",
+      img: imgUrl,
+      type: "info",
+      question: undefined,
+      options: []
+    };
+  } else {
+    const type = document.getElementById('boardType').value;
+    let question = '';
+    let options = [];
+    if (type === 'question') {
+      question = document.getElementById('boardQuestion').value;
+      options = getCurrentOptions();
+      if (!question.trim()) {
+        showToast('Câu hỏi không được để trống!', 'error');
+        return;
       }
+      if (options.length < 2) {
+        showToast('Phải có ít nhất 2 đáp án!', 'error');
+        return;
+      }
+      if (!options.some(opt => opt.isCorrect)) {
+        showToast('Phải chọn một đáp án đúng!', 'error');
+        return;
+      }
+      if (options.some(opt => !opt.text.trim())) {
+        showToast('Không được để trống đáp án!', 'error');
+        return;
+      }
+    }
 
-      renderBoardsGrid();
-      closeModal();
-      showToast('Đã cập nhật board thành công!', 'success');
-    });
+    boardsData[boardId] = {
+      ...boardsData[boardId],
+      title: type === 'question' ? "" : document.getElementById('boardTitle').value,
+      author: "",
+      describe: type === 'question' ? "" : document.getElementById('boardDesc').value,
+      img: imgUrl,
+      type,
+      question: type === 'question' ? question : undefined,
+      options: type === 'question' ? options : []
+    };
+  }
 
-    // Reset form
-    document.getElementById('resetForm').addEventListener('click', () => {
-      document.getElementById('roomForm').reset();
-      initializeBoards();
-      renderBoardsGrid();
-      showToast('Đã đặt lại form!', 'success');
-    });
+  renderBoardsGrid();
+  closeModal();
+  showToast('Đã cập nhật board thành công!', 'success');
+});
 
-    // Submit form
-    document.getElementById('roomForm').addEventListener('submit', async (e) => {
-  e.preventDefault(); 
+// Reset form
+document.getElementById('resetForm').addEventListener('click', () => {
+  document.getElementById('roomForm').reset();
+  initializeBoards();
+  renderBoardsGrid();
+  showToast('Đã đặt lại form!', 'success');
+});
+
+// Submit form
+document.getElementById('roomForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
   if (!firebase.auth().currentUser) {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
@@ -320,9 +320,9 @@ if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
     showToast('Đang chuyển đến trang thanh toán...', 'info');
     // Chuẩn bị dữ liệu thanh toán (có thể chỉ cần tổng tiền, user, ... tuỳ backend)
     const paymentData = {
-    amount: total,
-                        description: "Thanh toán room",
-                        orderCode: Math.floor(100000 + Math.random() * 900000), // 6 chữ số
+      amount: 20000,
+      description: "Thanh toán room",
+      orderCode: Math.floor(100000 + Math.random() * 900000), // 6 chữ số
       uid: localStorage.getItem('user_uid'),
       // Có thể bổ sung thêm thông tin nếu backend yêu cầu
     };
@@ -447,28 +447,28 @@ if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
   }
 });
 
-    // Hiển thị/ẩn trường câu hỏi khi chọn type
-    document.getElementById('boardType').addEventListener('change', function () {
-      const isQuestion = this.value === 'question';
-      document.getElementById('questionFields').style.display = isQuestion ? '' : 'none';
-      document.getElementById('infoFields').style.display = isQuestion ? 'none' : '';
+// Hiển thị/ẩn trường câu hỏi khi chọn type
+document.getElementById('boardType').addEventListener('change', function () {
+  const isQuestion = this.value === 'question';
+  document.getElementById('questionFields').style.display = isQuestion ? '' : 'none';
+  document.getElementById('infoFields').style.display = isQuestion ? 'none' : '';
 
-      const titleInput = document.getElementById('boardTitle');
-      const descInput = document.getElementById('boardDesc');
-      // Khi cần ẩn trường (ví dụ type là question hoặc board big)
-      titleInput.required = false;
-      descInput.required = false;
-      titleInput.value = "";
-      descInput.value = "";
+  const titleInput = document.getElementById('boardTitle');
+  const descInput = document.getElementById('boardDesc');
+  // Khi cần ẩn trường (ví dụ type là question hoặc board big)
+  titleInput.required = false;
+  descInput.required = false;
+  titleInput.value = "";
+  descInput.value = "";
 
-      // Khi hiện trường (ví dụ type là info)
-      if (this.value === 'info') {
-        titleInput.required = true;
-        // descInput.required = true; // nếu bạn muốn
-      }
-    });
+  // Khi hiện trường (ví dụ type là info)
+  if (this.value === 'info') {
+    titleInput.required = true;
+    // descInput.required = true; // nếu bạn muốn
+  }
+});
 
-    document.getElementById('previewDemo').addEventListener('click', async () => {
+document.getElementById('previewDemo').addEventListener('click', async () => {
   // Lấy dữ liệu boards
   const boards = Object.values(boardsData);
 
@@ -491,24 +491,24 @@ if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
 });
 
 
-     // Hiển thị hộp thoại hướng dẫn khi click dấu hỏi
-    document.querySelector('.help').addEventListener('click', function() {
-      document.querySelector('.operating-intro').classList.remove('display-none');
-    });
+// Hiển thị hộp thoại hướng dẫn khi click dấu hỏi
+document.querySelector('.help').addEventListener('click', function () {
+  document.querySelector('.operating-intro').classList.remove('display-none');
+});
 
-    // Đóng hộp thoại hướng dẫn khi click nút đóng
-    document.querySelector('.operating-intro-close').addEventListener('click', function() {
-      document.querySelector('.operating-intro').classList.add('display-none');
-    });
+// Đóng hộp thoại hướng dẫn khi click nút đóng
+document.querySelector('.operating-intro-close').addEventListener('click', function () {
+  document.querySelector('.operating-intro').classList.add('display-none');
+});
 
-    // Đóng hộp thoại hướng dẫn khi click ra ngoài vùng nội dung
-    document.querySelector('.operating-intro').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.classList.add('display-none');
-      }
-    });
+// Đóng hộp thoại hướng dẫn khi click ra ngoài vùng nội dung
+document.querySelector('.operating-intro').addEventListener('click', function (e) {
+  if (e.target === this) {
+    this.classList.add('display-none');
+  }
+});
 
-    async function uploadAudioToCloudinary(file) {
+async function uploadAudioToCloudinary(file) {
   const url = 'https://api.cloudinary.com/v1_1/de6euuwm4/video/upload';
   const formData = new FormData();
   formData.append('file', file);
