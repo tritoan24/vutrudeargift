@@ -314,34 +314,39 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
 
   // Lấy màu phòng
   const roomColorHex = document.getElementById('boardColor').value;
-
-  // --- BẮT ĐẦU: Thanh toán trước ---
+ // --- BẮT ĐẦU: Thanh toán trước ---
   try {
     showToast('Đang chuyển đến trang thanh toán...', 'info');
-    // Chuẩn bị dữ liệu thanh toán (có thể chỉ cần tổng tiền, user, ... tuỳ backend)
+    // Chuẩn bị dữ liệu thanh toán
     const paymentData = {
       amount: 20000,
       description: "Thanh toán room",
-      orderCode: Math.floor(100000 + Math.random() * 900000), // 6 chữ số
+      orderCode: Math.floor(100000 + Math.random() * 900000),
       uid: localStorage.getItem('user_uid'),
-      // Có thể bổ sung thêm thông tin nếu backend yêu cầu
     };
 
-    const paymentRes = await fetch('https://dearlove-backend.onrender.com/api/payment/create', {
+    console.log(">> Gửi yêu cầu thanh toán...");
+    const res = await fetch('https://dearlove-backend.onrender.com/api/payment/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(paymentData)
     });
-    const paymentResult = await paymentRes.json();
-    if (paymentResult.data && paymentResult.data.checkoutUrl) {
-      document.getElementById('paymentIframe').src = paymentResult.data.checkoutUrl;
+
+    const resultData = await res.json();
+    console.log(">> Kết quả từ server:", resultData);
+
+    if (resultData.data && resultData.data.checkoutUrl) {
+      document.getElementById('paymentIframe').src = resultData.data.checkoutUrl;
       document.getElementById('paymentModal').style.display = 'block';
 
-      // Đợi thanh toán thành công qua message từ iframe
+      // Lắng nghe message từ iframe
       await new Promise((resolve, reject) => {
         function handlePaymentMessage(event) {
+          // Có thể kiểm tra event.origin nếu cần bảo mật hơn
           if (event.data && event.data.type === 'paymentSuccess') {
             document.getElementById('paymentModal').style.display = 'none';
+            if (loading) loading.style.display = 'block';
+            if (resultDiv) resultDiv.style.display = 'none';
             window.removeEventListener('message', handlePaymentMessage);
             resolve();
           }
@@ -355,10 +360,12 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
       });
       showToast('Thanh toán thành công! Đang tạo phòng...', 'success');
     } else {
+      console.error('Không lấy được link thanh toán! paymentResult:', resultData);
       showToast('Không lấy được link thanh toán!', 'error');
       return;
     }
   } catch (err) {
+    console.error('Lỗi khi gọi API thanh toán:', err);
     showToast('Thanh toán thất bại hoặc bị hủy!', 'error');
     return;
   }
