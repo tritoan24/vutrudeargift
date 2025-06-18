@@ -6,6 +6,7 @@ let selectedVoucher = null;
 let vouchers = [];
 
 async function loadUserVouchers() {
+  if (!voucherList) return;
   voucherList.innerHTML = 'Đang tải voucher...';
   voucherResult.style.display = 'none';
   selectedVoucher = null;

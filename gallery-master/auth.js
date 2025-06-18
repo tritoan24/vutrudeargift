@@ -67,9 +67,9 @@ firebase.auth().onAuthStateChanged(user => {
     userName.textContent = user.displayName || '';
     userEmail.textContent = user.email || '';
     // Gọi loadUserVouchers nếu có
-    if (typeof loadUserVouchers === 'function') {
-      loadUserVouchers();
-    }
+  if (typeof loadUserVouchers === 'function' && document.getElementById('voucherList')) {
+  loadUserVouchers();
+}
   } else {
     // Đăng xuất
     localStorage.removeItem('user_uid');
