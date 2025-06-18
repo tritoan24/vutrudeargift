@@ -168,7 +168,7 @@ export default class UI {
 
 	handleOptionClick(button: HTMLButtonElement) {
 		const isCorrect = button.dataset.isCorrect === "true";
-		this.doms.question_result.innerText = isCorrect ? "Correct!" : "Incorrect, please try again!";
+		this.doms.question_result.innerText = isCorrect ? "Đúng rồi, giỏi quá đi." : "Sai rồi, hơi buồn đấy nha, chọn lại đi.";
 		if (isCorrect) {
 			// Disable all buttons on correct answer
 			const buttons = this.doms.question_options.querySelectorAll("button");
@@ -214,3 +214,12 @@ export default class UI {
 		return B.some(name => A.includes(name));
 	}
 }
+
+// Đặt ở cuối file hoặc sau khi DOM đã sẵn sàng
+document.addEventListener('click', function(e) {
+  const closeBtn = (e.target as HTMLElement).closest('.question-block-close');
+  if (closeBtn) {
+    const questionBlock = document.querySelector('.question-block') as HTMLElement;
+    if (questionBlock) questionBlock.style.display = 'none';
+  }
+});

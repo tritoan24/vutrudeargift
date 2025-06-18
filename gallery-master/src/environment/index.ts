@@ -114,7 +114,7 @@ export default class Environment {
 			new MeshBasicMaterial({ map: bigTexture, side: DoubleSide })
 		);
 
-		bigBoard.position.set(0, bigHeight / 15 + 10, 50.5);
+		bigBoard.position.set(5, bigHeight / 15 + 9, 50.5);
 		bigBoard.rotation.y = Math.PI;
 		bigBoard.userData = {
 			...bigInfo,
@@ -174,7 +174,7 @@ export default class Environment {
 					if (isMesh(item) && !item.name.includes('gallery')) {
 						if (item.material instanceof MeshBasicMaterial) {
 							// Lấy mã màu từ roomColorHex nếu hợp lệ, nếu không dùng màu mặc định
-							let colorHex = 0xff69b4; // Màu mặc định
+							let colorHex = 0xd6d6ea; // Màu mặc định
 							if (this.roomColorHex && /^0x[0-9a-fA-F]{6}$/.test(this.roomColorHex)) {
 								colorHex = Number(this.roomColorHex);
 							}

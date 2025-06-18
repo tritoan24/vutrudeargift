@@ -125,10 +125,15 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	
 	top: 0;
-	background: rgba(0, 0, 0, 0.6);
-	color: #fff;
+	background: rgba(92, 92, 92, 0.6);
+	color: #ffffff;
 	display: flex;
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	overflow-y: auto;
+	overflow-x: hidden;
 	justify-content: center;
 	align-items: center;
 }
@@ -136,9 +141,10 @@
 	position: relative;
 	width: 80%;
 	height: 70%;
-	background: #000;
+	background: none;
 	padding: 60px 40px 40px;
 	border-radius: 20px;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 2px 12px rgba(0, 0, 0, 0.3);
 	transition: opacity .5s, transform .5s;
 }
 .boards-info .boards-container.animate-in {
@@ -155,10 +161,11 @@
 	}
 }
 .boards-info .boards-container .content {
+	display: flex;
+	flex-direction: row;
+	column-gap: 20px;
 	width: 100%;
 	height: 100%;
-	display: flex;
-	column-gap: 20px;
 }
 .boards-info .boards-container .close {
 	position: absolute;
@@ -178,10 +185,12 @@
 	font-size: 18px;
 }
 .boards-info .boards-container .info {
-	width: 50%;
-	height: 100%;
+	width: 70%;
+	min-width: 0;
+	font-size: 20px;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 }
 .boards-info .boards-container .info .title {
 	font-size: 24px;
@@ -192,13 +201,26 @@
 	line-height: 30px;
 }
 .boards-info .boards-container .img {
-	flex: 1;
+	width: 30%;
+	min-width: 0;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 	overflow: hidden;
+	background: none; /* Bỏ màu nền */
 }
 .boards-info .boards-container .img img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain; /* Hiển thị toàn bộ ảnh, không cắt */
+	display: block;
+	margin-left: auto;
+	margin-right: 0;
+	border-radius: 10px;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+	background: #222;
 }
 
 .question-block {
@@ -214,158 +236,210 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .question-block .question-container {
 	position: relative;
 	width: 80%;
 	height: 70%;
-	background: #000;
+	background: none;
 	padding: 60px 40px 40px;
 	border-radius: 20px;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 2px 12px rgba(0, 0, 0, 0.3);
 	transition: opacity .5s, transform .5s;
-}
-.question-block .question-container.animate-in {
-	animation: fadeScaleIn 0.5s ease-out;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 .question-block .question-container .content {
+	display: flex;
+	flex-direction: row;
+	column-gap: 20px;
 	width: 100%;
 	height: 100%;
-	display: flex;
-	column-gap: 20px;
-}
-.question-block .question-container .close {
-	position: absolute;
-	right: 12px;
-	top: 12px;
-	cursor: pointer;
-	text-align: center;
-	width: 22px;
-	height: 22px;
-	line-height: 15px;
-	border: 2px solid #fff;
-	border-radius: 50%;
-	-webkit-tap-highlight-color: transparent;
-}
-.question-block .question-container .close::after {
-	content: "x";
-	font-size: 18px;
 }
 .question-block .question-container .info {
-	width: 50%;
-	height: 100%;
+	width: 70%;
+	min-width: 0;
+	font-size: 20px;
 	display: flex;
 	flex-direction: column;
-}
-.question-block .question-container .info .question-text {
-	font-size: 24px;
-}
-.question-block .question-container .info .options {
-	margin-top: 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-.question-block .question-container .info .options button {
-	padding: 10px;
-	background: #333;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	text-align: left;
-}
-.question-block .question-container .info .options button:hover {
-	background: #555;
-}
-.question-block .question-container .info .options button.correct {
-	background: #28a745;
-	animation: glow 0.5s ease-in-out;
-}
-.question-block .question-container .info .options button.incorrect {
-	background: #dc3545;
-	animation: shake 0.5s ease-in-out;
-}
-@keyframes glow {
-	0% {
-		box-shadow: 0 0 5px #28a745;
-	}
-	50% {
-		box-shadow: 0 0 20px #28a745;
-	}
-	100% {
-		box-shadow: 0 0 5px #28a745;
-	}
-}
-@keyframes shake {
-	0% { transform: translateX(0); }
-	25% { transform: translateX(-5px); }
-	50% { transform: translateX(5px); }
-	75% { transform: translateX(-5px); }
-	100% { transform: translateX(0); }
-}
-.question-block .question-container .info .result {
-	margin-top: 20px;
-	font-size: 18px;
+	justify-content: center;
 }
 .question-block .question-container .image {
-	flex: 1;
+	width: 30%;
+	min-width: 0;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 	overflow: hidden;
+	background: none !important;
 }
 .question-block .question-container .image img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	display: block;
+	margin-left: auto;
+	margin-right: 0;
+	border-radius: 10px;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+	background: #222;
+}
+.question-block .question-container .close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    z-index: 10;
+}
+.question-block .question-container .close:before, 
+.question-block .question-container .close:after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 5px;
+    width: 3px;
+    height: 22px;
+    background: #fff;
+    border-radius: 2px;
+}
+.question-block .question-container .close:before {
+    transform: rotate(45deg);
+}
+.question-block .question-container .close:after {
+    transform: rotate(-45deg);
+}
+.question-block .question-container .close:hover {
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
 }
 
-@media screen and (max-width: 960px) {
-	.boards-info .boards-container {
-		width: 65%;
-		height: 85%;
-	}
-	.boards-info .boards-container .content {
-		flex-direction: column;
-		column-gap: 0;
-		overflow-y: scroll;
-	}
-	.boards-info .boards-container .info {
-		margin-top: 20px;
-		width: 100%;
-		height: auto;
-		order: 2;
-	}
-	.boards-info .boards-container .img {
-		overflow: initial;
-		order: 1;
-	}
-	.boards-info .boards-container .img img {
-		height: auto;
-		object-fit: initial;
-	}
-
-	.question-block .question-container {
-		width: 65%;
-		height: 85%;
-	}
-	.question-block .question-container .content {
-		flex-direction: column;
-		column-gap: 0;
-		overflow-y: scroll;
-	}
-	.question-block .question-container .info {
-		margin-top: 20px;
-		width: 100%;
-		height: auto;
-		order: 2;
-	}
-	.question-block .question-container .image {
-		overflow: initial;
-		order: 1;
-	}
-	.question-block .question-container .image img {
-		height: auto;
-		object-fit: initial;
-	}
+/* Style cho các lựa chọn câu hỏi */
+.question-block .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
 }
+
+.question-block .option-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    font-weight: 500;
+    outline: none;
+}
+
+.question-block .option-button:hover:not(:disabled) {
+    background: #6c63ff;
+    color: #fff;
+}
+
+.question-block .option-button.correct {
+    background: #05ff0d !important;
+    color: #fff !important;
+    box-shadow: 0 2px 12px rgba(76,175,80,0.15);
+}
+
+.question-block .option-button.incorrect {
+    animation: shake 0.4s;
+    background: #ff5252 !important;
+    color: #fff !important;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-8px); }
+    40%, 60% { transform: translateX(8px); }
+}
+
+/* Style cho kết quả */
+.question-block .result {
+    margin-top: 18px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    min-height: 1.5em;
+    transition: color 0.2s;
+}
+
+.question-block .option-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Luôn chia 2 cột ngang cho cả boards-info và question-block */
+.boards-info .boards-container .content,
+.question-block .question-container .content {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Phần chữ bên trái rộng hơn, ảnh bên phải nhỏ hơn */
+.boards-info .boards-container .info,
+.question-block .question-container .info {
+    width: 70%;
+    min-width: 0;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.boards-info .boards-container .img,
+.question-block .question-container .image {
+    width: 30%;
+    min-width: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: hidden;
+    background: none !important;
+}
+.boards-info .boards-container .img img,
+.question-block .question-container .image img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    background: #222;
+}
+
+
+/* Tăng tỷ lệ phần thông tin bên trái, giảm phần ảnh bên phải */
+.boards-info .boards-container .info {
+    width: 70%;
+    min-width: 0;
+    font-size: 20px;
+}
+.boards-info .boards-container .img {
+    width: 30%;
+    min-width: 0;
+    background: none !important; /* Bỏ màu nền */
+}
+
 
 .help {
 	position: fixed;
@@ -447,4 +521,52 @@
 	#joystick {
 		left: 10%;
 	}
+}
+
+/* Mobile: thu nhỏ dialog và tăng padding hai bên */
+@media screen and (max-width: 900px) {
+    .boards-info .boards-container,
+    .question-block .question-container {
+        width: 88vw;
+        height: 70vh;
+        padding-left: 24px;
+        padding-right: 24px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        box-sizing: border-box;
+    }
+	    .boards-info .boards-container .info,
+    .question-block .question-container .info {
+        font-size: 15px;
+        width: 70vw;
+    }
+    .boards-info .boards-container .img,
+    .question-block .question-container .image {
+        width: 30vw;
+    }
+   
+}
+
+
+/* Cho phép phần mô tả lướt khi quá dài */
+.boards-info .boards-container .info .describe {
+    max-height: 30vh;
+    overflow-y: auto;
+    word-break: break-word;
+    padding-right: 8px; /* để lộ thanh cuộn đẹp hơn */
+    scrollbar-width: thin;
+    scrollbar-color: #888 #222;
+}
+
+/* Tùy chọn: style thanh cuộn cho Chrome */
+.boards-info .boards-container .info .describe::-webkit-scrollbar {
+    width: 6px;
+}
+.boards-info .boards-container .info .describe::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+.boards-info .boards-container .info .describe::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 4px;
 }
