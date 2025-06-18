@@ -320,10 +320,13 @@ if (!imgUrl.match(/^data:image\/|^https?:\/\/.*\.(?:png|jpg|jpeg|gif)$/)) {
     showToast('Đang chuyển đến trang thanh toán...', 'info');
     // Chuẩn bị dữ liệu thanh toán (có thể chỉ cần tổng tiền, user, ... tuỳ backend)
     const paymentData = {
-      price: 20000,
-      user_uid: localStorage.getItem('user_uid'),
+    amount: total,
+                        description: "Thanh toán room",
+                        orderCode: Math.floor(100000 + Math.random() * 900000), // 6 chữ số
+      uid: localStorage.getItem('user_uid'),
       // Có thể bổ sung thêm thông tin nếu backend yêu cầu
     };
+
     const paymentRes = await fetch('https://dearlove-backend.onrender.com/api/payment/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
