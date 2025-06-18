@@ -17,6 +17,7 @@ export default class Environment {
 	is_load_finished = false;
 	private boards_info: Record<string, any> = {};
 	public audioUrl: string | null = null;
+	private roomColorHex: string = ""; // Thêm biến này vào class
 
 	constructor() {
 		this.core = new Core();
@@ -26,9 +27,10 @@ export default class Environment {
 
 	private async _init() {
 		try {
-			const { boards, audioUrl } = await fetchRoomBoards();
+			const { boards, audioUrl, roomColorHex } = await fetchRoomBoards();
 			this.boards_info = boards;
 			this.audioUrl = audioUrl;
+			this.roomColorHex = roomColorHex;
 			await this._loadScenes();
 		} catch (e) {
 			console.error(e);
@@ -169,10 +171,14 @@ export default class Environment {
 
 				// Đổi màu cho scene collision nhưng bỏ qua các bức tranh
 				gltf.scene.traverse(item => {
-					// Kiểm tra nếu không phải là gallery board
 					if (isMesh(item) && !item.name.includes('gallery')) {
 						if (item.material instanceof MeshBasicMaterial) {
-							item.material.color.setHex(0xd6d6ea);
+							// Lấy mã màu từ roomColorHex nếu hợp lệ, nếu không dùng màu mặc định
+							let colorHex = 0xff69b4; // Màu mặc định
+							if (this.roomColorHex && /^0x[0-9a-fA-F]{6}$/.test(this.roomColorHex)) {
+								colorHex = Number(this.roomColorHex);
+							}
+							item.material.color.setHex(colorHex);
 							item.material.needsUpdate = true;
 						}
 					}

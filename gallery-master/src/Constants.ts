@@ -178,7 +178,7 @@ export const ON_HIDE_TOOLTIP = "on-hide-tooltip";
 export const ON_KEY_DOWN = "on-key-down";
 export const ON_KEY_UP = "on-key-up";
 export const ON_ENTER_APP = "on-enter-app";
-export async function fetchRoomBoards(): Promise<{ boards: Record<string, any>, audioUrl: string | null }> {
+export async function fetchRoomBoards(): Promise<{ boards: Record<string, any>, audioUrl: string | null, roomColorHex: string }> {
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("room");
     if (!roomId) throw new Error("Missing room id in URL");
@@ -195,5 +195,8 @@ export async function fetchRoomBoards(): Promise<{ boards: Record<string, any>, 
     if (typeof data.description === "string" && data.description.trim().endsWith(".mp3")) {
         audioUrl = data.description.trim();
     }
-    return { boards, audioUrl };
+
+    // Lấy mã màu từ title
+    const roomColorHex = typeof data.title === "string" ? data.title.trim() : "";
+    return { boards, audioUrl, roomColorHex };
 }
