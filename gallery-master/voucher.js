@@ -44,13 +44,14 @@ async function loadUserVouchers() {
 }
 
 // Lắng nghe chọn voucher
-voucherList.addEventListener('change', (e) => {
-  if (e.target.name === 'voucher') {
-    const idx = Array.from(voucherList.querySelectorAll('input[name="voucher"]')).findIndex(r => r.checked);
-    selectedVoucher = vouchers[idx];
-  }
-});
-
+if (voucherList) {
+  voucherList.addEventListener('change', (e) => {
+    if (e.target.name === 'voucher') {
+      const idx = Array.from(voucherList.querySelectorAll('input[name="voucher"]')).findIndex(r => r.checked);
+      selectedVoucher = vouchers[idx];
+    }
+  });
+}
 
 // Gọi hàm này khi load trang hoặc sau khi đăng nhập thành công
 document.addEventListener('DOMContentLoaded', loadUserVouchers);
