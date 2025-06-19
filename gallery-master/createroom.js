@@ -216,6 +216,7 @@ document.getElementById('boardEditForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
   const boardId = document.getElementById('editingBoardId').value;
+
   // const imgUrl = document.getElementById('boardImg').value;
 
   // Validate image URL
@@ -295,6 +296,7 @@ document.getElementById('resetForm').addEventListener('click', () => {
 // Submit form
 document.getElementById('roomForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+  
   if (!firebase.auth().currentUser) {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
@@ -336,6 +338,8 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     console.log(">> Kết quả từ server:", resultData);
 
     if (resultData.data && resultData.data.checkoutUrl) {
+console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutUrl);
+
       document.getElementById('paymentIframe').src = resultData.data.checkoutUrl;
       document.getElementById('paymentModal').style.display = 'block';
 
@@ -531,5 +535,6 @@ async function uploadAudioToCloudinary(file) {
   }
   throw new Error('Upload âm thanh thất bại');
 }
+
 
 
