@@ -17,7 +17,7 @@ async function loadUserVouchers() {
     return;
   }
   try {
-    const res = await fetch(`https://56b5-2405-4802-1d77-87c0-d41-8c15-b0fe-b90d.ngrok-free.app/api/vouchers/saved/${uid}`);
+    const res = await fetch(`https://887d-2405-4802-1d77-87c0-d41-8c15-b0fe-b90d.ngrok-free.app/api/vouchers/saved/${uid}`);
     const data = await res.json();
     if (!data.success) {
       voucherList.innerHTML = `<span style="color:#e53935;">${data.message}</span>`;
