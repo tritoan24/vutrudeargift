@@ -448,8 +448,21 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
     });
     const result = await res.json();
     if (res.ok) {
-      resultDiv.innerHTML = '<div class="success">Tạo phòng thành công!</div><pre>' + JSON.stringify(result, null, 2) + '</pre>';
-      showToast('Tạo phòng thành công!', 'success');
+       resultDiv.innerHTML = '<div class="success">Tạo phòng thành công!</div><pre>' + JSON.stringify(result, null, 2) + '</pre>';
+  showToast('Tạo phòng thành công!', 'success');
+
+  // Gọi API lưu sản phẩm
+  const user_uid = localStorage.getItem('user_uid');
+  // Tùy vào dữ liệu phòng, bạn lấy thông tin phù hợp để truyền vào product
+  const product = {
+    uid: user_uid,
+    name: "Room " + (result.data && result.data._id ? result.data._id : ""),
+    type: "Room3d",
+    price: 5000, // hoặc lấy giá thực tế nếu có
+    images: "https://res.cloudinary.com/dtcyfyauk/image/upload/v1750322790/cover_yvkf6s.jpg",
+    linkproduct: window.location.origin + "/index.html?room=" + (result.data && result.data._id ? result.data._id : "")
+  };
+  createProduct(product);
     } else {
       resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
       showToast('Lỗi khi tạo phòng!', 'error');
@@ -536,6 +549,21 @@ async function uploadAudioToCloudinary(file) {
     return data.secure_url;
   }
   throw new Error('Upload âm thanh thất bại');
+}
+
+async function createProduct(product) {
+    const res = await fetch('https://dearlove-backend.onrender.com/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product)
+    });
+    const data = await res.json();
+    if (data.success) {
+        alert('Tạo sản phẩm thành công!');
+        console.log(data.data); // sản phẩm vừa tạo
+    } else {
+        alert('Lỗi: ' + data.message);
+    }
 }
 
 
