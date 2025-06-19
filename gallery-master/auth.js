@@ -33,7 +33,7 @@ googleLoginBtn.addEventListener('click', async () => {
     const idToken = await result.user.getIdToken();
 
     // Gửi idToken lên backend nếu cần
-    await fetch('https://887d-2405-4802-1d77-87c0-d41-8c15-b0fe-b90d.ngrok-free.app/api/auth/login', {
+    await fetch('https://dearlove-backend.onrender.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idToken })

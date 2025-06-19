@@ -329,7 +329,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     };
 
     console.log(">> Gửi yêu cầu thanh toán...");
-    const res = await fetch('https://887d-2405-4802-1d77-87c0-d41-8c15-b0fe-b90d.ngrok-free.app/api/payment/create', {
+    const res = await fetch('https://dearlove-backend.onrender.com/api/payment/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(paymentData)
@@ -441,7 +441,7 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
 
   resultDiv.innerText = 'Đang gửi...';
   try {
-    const res = await fetch('https://887d-2405-4802-1d77-87c0-d41-8c15-b0fe-b90d.ngrok-free.app/api/boards', {
+    const res = await fetch('https://dearlove-backend.onrender.com/api/boards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
