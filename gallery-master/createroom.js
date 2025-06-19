@@ -299,13 +299,34 @@ document.getElementById('resetForm').addEventListener('click', () => {
 // Submit form
 document.getElementById('roomForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  
+
   if (!firebase.auth().currentUser) {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
   }
   const loading = document.querySelector('.loading'); 
   const resultDiv = document.getElementById('result');
+
+  // --- Áp dụng voucher nếu có ---
+  if (typeof selectedVoucher === 'object' && selectedVoucher && selectedVoucher.code) {
+    try {
+      showToast('Đang áp dụng voucher...', 'info');
+      const uid = localStorage.getItem('user_uid');
+      const res = await fetch('https://dearlove-backend.onrender.com/api/vouchers/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid, code: selectedVoucher.code })
+      });
+      const data = await res.json();
+      if (!data.success) {
+        showToast(data.message || 'Áp dụng voucher thất bại!', 'error');
+        return;
+      }
+    } catch (err) {
+      showToast('Lỗi khi áp dụng voucher!', 'error');
+      return;
+    }
+  }
 
   // Validate boards data
   const boards = Object.values(boardsData);
