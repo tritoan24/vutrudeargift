@@ -301,6 +301,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
   }
+   const loading = document.querySelector('.loading'); 
   const resultDiv = document.getElementById('result');
 
   // Validate boards data
@@ -321,7 +322,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     showToast('Đang chuyển đến trang thanh toán...', 'info');
     // Chuẩn bị dữ liệu thanh toán
     const paymentData = {
-      amount: 20000,
+      amount: 5000,
       description: "Thanh toán room",
       orderCode: Math.floor(100000 + Math.random() * 900000),
       uid: localStorage.getItem('user_uid'),
@@ -348,13 +349,14 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
         function handlePaymentMessage(event) {
           // Có thể kiểm tra event.origin nếu cần bảo mật hơn
           if (event.data && event.data.type === 'paymentSuccess') {
+          console.log('Thanh toán thành công:', event.data);
             document.getElementById('paymentModal').style.display = 'none';
             if (loading) loading.style.display = 'block';
-            if (resultDiv) resultDiv.style.display = 'none';
             window.removeEventListener('message', handlePaymentMessage);
             resolve();
           }
           if (event.data && event.data.type === 'paymentCancel') {
+          console.log('Thanh toán bị hủy:', event.data);
             document.getElementById('paymentModal').style.display = 'none';
             window.removeEventListener('message', handlePaymentMessage);
             reject(new Error('Thanh toán bị hủy!'));

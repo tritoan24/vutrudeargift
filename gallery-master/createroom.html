@@ -12,27 +12,31 @@
   <div class="container">
     <form id="roomForm">
       <!-- ...existing code... -->
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-  <h2 style="margin: 0;">Tạo phòng mới 
-    <span style="margin-left: 10px; color: #ff0000; ">
-    20.000 VNĐ
-  </span></h2>
-  <div id="authSection">
-    <button type="button" id="googleLoginBtn" style="display:flex;align-items:center;gap:8px;">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="Google"> Đăng nhập với Google
-    </button>
-    <div id="userInfo" style="display:none;align-items:center;gap:12px;margin-top:0;">
-      <img id="userAvatar" src="" alt="Avatar" style="width:36px;height:36px;border-radius:50%;border:2px solid #6c63ff;">
-      <div style="display:flex;flex-direction:column;">
-        <span id="userName" style="font-weight:bold;font-size:15px;color:#333;"></span>
-        <span id="userEmail" style="font-size:12px;color:#888;"></span>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h2 style="margin: 0;">Tạo phòng mới
+          <span style="margin-left: 10px; color: #ff0000; ">
+            20.000 VNĐ
+          </span>
+        </h2>
+        <div id="authSection">
+          <button type="button" id="googleLoginBtn" style="display:flex;align-items:center;gap:8px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20"
+              alt="Google"> Đăng nhập với Google
+          </button>
+          <div id="userInfo" style="display:none;align-items:center;gap:12px;margin-top:0;">
+            <img id="userAvatar" src="" alt="Avatar"
+              style="width:36px;height:36px;border-radius:50%;border:2px solid #6c63ff;">
+            <div style="display:flex;flex-direction:column;">
+              <span id="userName" style="font-weight:bold;font-size:15px;color:#333;"></span>
+              <span id="userEmail" style="font-size:12px;color:#888;"></span>
+            </div>
+            <button type="button" id="logoutBtn"
+              style="margin-left:12px;background:#9c0202;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Đăng
+              xuất</button>
+          </div>
+        </div>
       </div>
-      <button type="button" id="logoutBtn" style="margin-left:12px;background:#9c0202;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Đăng xuất</button>
-    </div>
-  </div>
-</div>
-<!-- ...existing code... -->
-<!-- ...existing code... -->
+
 
       <label>Chọn màu căn phòng
         <select id="boardColor">
@@ -56,7 +60,7 @@
       </div>
       <div id="boardsGrid" class="boards-grid"></div>
 
-   
+
 
       <button type="submit" style="margin-top: 24px;">Tạo phòng</button>
       <button type="button" id="resetForm" class="secondary">Đặt lại</button>
@@ -124,15 +128,17 @@
   </div>
 
   <!-- Modal Payment-->
-<div id="paymentModal"
+  <div id="paymentModal"
     style="display:none; position:fixed; top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
     <div
-        style="position:relative; margin: 5% auto; width: 90%; max-width: 800px; background:white; padding:20px; border-radius:10px;">
-        <button onclick="document.getElementById('paymentModal').style.display='none'"
-            style="position:absolute;top:10px;right:10px;">✖</button>
-        <iframe id="paymentIframe" style="width:100%; height:600px; border:none;"></iframe>
+      style="position:relative; margin: 5% auto; width: 90%; max-width: 800px; background:white; padding:20px; border-radius:10px;">
+      <button onclick="document.getElementById('paymentModal').style.display='none'"
+        style="position:absolute;top:10px;right:10px;">✖</button>
+      <iframe id="paymentIframe" style="width:100%; height:600px; border:none;"></iframe>
     </div>
-</div>
+  </div>
+
+  
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -140,7 +146,7 @@
   <script src="./auth.js"></script>
   <script src="./voucher.js"></script>
 
-  
+
 </body>
 
 </html>
