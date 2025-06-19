@@ -1,3 +1,6 @@
+const ORIGINAL_PRICE = 20000; // 20.000 VNĐ
+let finalPrice = ORIGINAL_PRICE;
+
 // Dữ liệu boards
 let boardsData = {};
 
@@ -144,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Modal controls
-document.querySelector('.close').addEventListener('click', closeModal);
+document.querySelector('#boardModal .close').addEventListener('click', closeModal);
 document.getElementById('cancelEdit').addEventListener('click', closeModal);
 
 // Close modal when clicking outside
@@ -301,7 +304,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
   }
-   const loading = document.querySelector('.loading'); 
+  const loading = document.querySelector('.loading'); 
   const resultDiv = document.getElementById('result');
 
   // Validate boards data
@@ -317,12 +320,26 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
 
   // Lấy màu phòng
   const roomColorHex = document.getElementById('boardColor').value;
- // --- BẮT ĐẦU: Thanh toán trước ---
+
+  // Nếu tổng tiền = 0 thì bỏ qua thanh toán, chạy luôn các bước tiếp theo
+  if (finalPrice === 0) {
+    showToast('Miễn phí! Đang tạo phòng...', 'success');
+    await createRoomAndProduct({boards, roomColorHex, loading, resultDiv});
+    return;
+  }
+
+  // Kiểm tra số tiền tối thiểu
+if (finalPrice <= 2000) {
+  showToast('Số tiền thanh toán phải lớn hơn 2.000 VNĐ!', 'error');
+  return;
+}
+
+  // --- BẮT ĐẦU: Thanh toán trước ---
   try {
     showToast('Đang chuyển đến trang thanh toán...', 'info');
     // Chuẩn bị dữ liệu thanh toán
     const paymentData = {
-      amount: 5000,
+      amount: finalPrice,
       description: "Thanh toán room",
       orderCode: Math.floor(100000 + Math.random() * 900000),
       uid: localStorage.getItem('user_uid'),
@@ -339,7 +356,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     console.log(">> Kết quả từ server:", resultData);
 
     if (resultData.data && resultData.data.checkoutUrl) {
-console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutUrl);
+      console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutUrl);
 
       document.getElementById('paymentIframe').src = resultData.data.checkoutUrl;
       document.getElementById('paymentModal').style.display = 'block';
@@ -349,14 +366,14 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
         function handlePaymentMessage(event) {
           // Có thể kiểm tra event.origin nếu cần bảo mật hơn
           if (event.data && event.data.type === 'paymentSuccess') {
-          console.log('Thanh toán thành công:', event.data);
+            console.log('Thanh toán thành công:', event.data);
             document.getElementById('paymentModal').style.display = 'none';
             if (loading) loading.style.display = 'block';
             window.removeEventListener('message', handlePaymentMessage);
             resolve();
           }
           if (event.data && event.data.type === 'paymentCancel') {
-          console.log('Thanh toán bị hủy:', event.data);
+            console.log('Thanh toán bị hủy:', event.data);
             document.getElementById('paymentModal').style.display = 'none';
             window.removeEventListener('message', handlePaymentMessage);
             reject(new Error('Thanh toán bị hủy!'));
@@ -376,7 +393,11 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
     return;
   }
   // --- KẾT THÚC: Thanh toán, tiếp tục upload và tạo phòng ---
+  await createRoomAndProduct({boards, roomColorHex, loading, resultDiv});
+});
 
+// --- Tách phần upload và tạo phòng thành hàm riêng ---
+async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) {
   // --- Upload các ảnh base64 lên Cloudinary ---
   async function uploadImageToCloudinary(base64) {
     const url = 'https://api.cloudinary.com/v1_1/de6euuwm4/image/upload';
@@ -448,30 +469,60 @@ console.log(">> Link thanh toán:", resultData.data && resultData.data.checkoutU
     });
     const result = await res.json();
     if (res.ok) {
-       resultDiv.innerHTML = '<div class="success">Tạo phòng thành công!</div><pre>' + JSON.stringify(result, null, 2) + '</pre>';
   showToast('Tạo phòng thành công!', 'success');
+  console.log('Kết quả tạo phòng:', result);
+
+  // Lấy id đúng từ kết quả trả về
+  const roomId = result._id || (result.data && result.data._id) || "";
+  const productLink = window.location.origin + "/index.html?room=" + roomId;
+  const productImg = "https://res.cloudinary.com/dtcyfyauk/image/upload/v1750322790/cover_yvkf6s.jpg";
+  const productName = "Room " + roomId;
+  const priceText = `<span style="color:#6c63ff;font-weight:bold;">${finalPrice.toLocaleString()} VNĐ</span>`;
+
+  resultDiv.innerHTML = `
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="${productImg}" alt="Ảnh sản phẩm" class="product-img">
+      </div>
+      <div class="product-info">
+        <div class="product-title">${productName}</div>
+        <div class="product-price">Giá: ${priceText}</div>
+        <div class="product-link">
+          <a href="${productLink}" target="_blank" id="productLink">${productLink}</a>
+          <button id="copyProductLink" class="copy-btn" title="Copy link">📋</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Xử lý nút copy
+  const copyBtn = document.getElementById('copyProductLink');
+  copyBtn.onclick = function() {
+    navigator.clipboard.writeText(productLink).then(() => {
+      showToast('Đã copy link sản phẩm!', 'success');
+    });
+  };
 
   // Gọi API lưu sản phẩm
   const user_uid = localStorage.getItem('user_uid');
-  // Tùy vào dữ liệu phòng, bạn lấy thông tin phù hợp để truyền vào product
   const product = {
     uid: user_uid,
-    name: "Room " + (result.data && result.data._id ? result.data._id : ""),
+    name: "Room 3D " + roomId,
     type: "Room3d",
-    price: 5000, // hoặc lấy giá thực tế nếu có
-    images: "https://res.cloudinary.com/dtcyfyauk/image/upload/v1750322790/cover_yvkf6s.jpg",
-    linkproduct: window.location.origin + "/index.html?room=" + (result.data && result.data._id ? result.data._id : "")
+    price: finalPrice,
+    images: productImg,
+    linkproduct: productLink
   };
   createProduct(product);
-    } else {
-      resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
-      showToast('Lỗi khi tạo phòng!', 'error');
-    }
+} else {
+  resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
+  showToast('Lỗi khi tạo phòng!', 'error');
+}
   } catch (err) {
     resultDiv.innerHTML = '<div class="error">Lỗi gửi request!</div>';
     showToast('Lỗi gửi request!', 'error');
   }
-});
+}
 
 // Hiển thị/ẩn trường câu hỏi khi chọn type
 document.getElementById('boardType').addEventListener('change', function () {
@@ -559,7 +610,6 @@ async function createProduct(product) {
     });
     const data = await res.json();
     if (data.success) {
-        alert('Tạo sản phẩm thành công!');
         console.log(data.data); // sản phẩm vừa tạo
     } else {
         alert('Lỗi: ' + data.message);
