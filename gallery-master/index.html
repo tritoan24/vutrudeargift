@@ -1,107 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./public/vite.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>gallery</title>
-	<link rel="stylesheet" href="src/style.css">
-	<link rel="stylesheet" href="src/ui/ui.css">
-  </head>
-  <body>
-    <!-- Liên quan đến loading -->
-    <div class="loading">
-      <div class="loading-circle"></div>
-    </div>
-    <div class="loading-complete display-none">
-      <p>
-        Đã xong
-        <svg t="1677233206130" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2675" width="24" height="24"><path d="M537.6 102.4c73.5744 0 142.336 20.6848 200.704 56.576 15.872 9.6256 16.7936 23.1424 2.9696 40.5504-14.08 16.2816-43.008 13.2608-86.8352-9.216l-0.0512 0.0512a318.1568 3100.168 0 1 0 104.8064 524.3904h0.3584c19.456-26.7776 40.5504-40.192 63.1296-40.2432l6.8096 0.4096c24.064 4.4032 30.4128 16.6912 19.0464 36.864l0.2048-0.3584-0.1536 0.1536-0.0512 0.2048h-0.1024l-7.936 10.5984A384 384 0 1 1 537.6 102.4z m332.288 201.0112a33.28 33.28 0 0 1 0 47.104l-276.48 276.48a31.2832 31.2832 0 0 1-0.512 0.4608l-3.584 3.584a30.72 30.72 0 0 1-43.4176 0l-1.8432-1.792-0.4096-0.512-135.3216-135.2704a30.72 30.72 0 0 1 0-43.4176l-3.584-3.584a30.72 30.72 0 0 1 43.4688 0l112.2304 112.128 255.232-255.1808a33.28 33.28 0 0 1 47.104 0z" fill="#ffffff" p-id="2676"></path></svg>
-      </p>
-      <p>
-      (nhấp đúp để vào chế độ toàn màn hình để có trải nghiệm tốt hơn!)
-      </p>
-      <div class="start">Nhập vai</div>
-    </div>
+<html lang="vi">
 
-    <!-- css3DRenderer -->
-    <div id="css"></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo phòng mới</title>
+  <link rel="stylesheet" href="./createroom.css">
+</head>
 
-    <!-- webgl -->
-    <div id="app"></div>
+<body>
+  <div class="container">
 
-    <!-- Gợi ý bong bóng bên dưới -->
-    <div class="preview-tooltip hide"></div>
-    <div class="preview-tips hide">Nhấp vào bức tranh để đọc câu truyện dành cho bạn!</div>
+    <form id="roomForm">
+      <!-- ...existing code... -->
+    <img style="width: 50px;" src="./public/vite.png" alt="Logo" class="logo">
 
-    <!-- Khung thông tin chi tiết tranh -->
-    <div class="boards-info" style="visibility: hidden;">
-      <div class="boards-container hide">
-        <div class="content">
-          <section class="info">
-            <div class="title"></div>
-            <div class="author"></div>
-            <div class="describe"></div>
-          </section>
-          <section class="img">
-            <img src="" alt="" />
-          </section>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h2 style="margin: 0;">Tạo phòng mới
+          <span style="margin-left: 10px; color: #ff0000; ">
+            20.000 VNĐ
+          </span>
+        </h2>
+        <div id="authSection">
+          <button type="button" id="googleLoginBtn" style="display:flex;align-items:center;gap:8px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20"
+              alt="Google"> Đăng nhập với Google
+          </button>
+          <div id="userInfo" style="display:none;align-items:center;gap:12px;margin-top:0;">
+            <img id="userAvatar" src="" alt="Avatar"
+              style="width:36px;height:36px;border-radius:50%;border:2px solid #6c63ff;">
+            <div style="display:flex;flex-direction:column;">
+              <span id="userName" style="font-weight:bold;font-size:15px;color:#333;"></span>
+              <span id="userEmail" style="font-size:12px;color:#888;"></span>
+            </div>
+            <button type="button" id="logoutBtn"
+              style="margin-left:12px;background:#9c0202;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Đăng
+              xuất</button>
+          </div>
         </div>
-        <div class="close boards-info-close"></div>
       </div>
-    </div>
 
-    <!-- Khung câu hỏi -->
-    <div class="question-block" style="display: none;">
-      <div class="question-container">
-            <div class="close question-block-close"></div>
-        <div class="content">
-          <section class="info">
-            <div class="question-text"></div>
-            <div class="options"></div>
-            <div class="result"></div>
-          </section>
-          <section class="image">
-            <img src="" alt="" />
-          </section>
+
+      <label>Chọn màu căn phòng
+        <select id="boardColor">
+          <option value="0xd6d6ea" style="background:#d6d6ea;">Mặc định</option>
+          <option value="0xff69b4" style="background:#ff69b4;">Màu Hồng (nữ đẹp)</option>
+          <option value="0xaea2c5" style="background:#aea2c5;">Màu tím than nhạt (nam đẹp)</option>
+        </select>
+      </label>
+
+      <label>Chọn file nhạc nền
+        <input type="file" id="bgMusic" accept=".mp3,audio/mp3,audio/mpeg">
+      </label>
+
+
+      <h3>Danh sách boards (Click để chỉnh sửa)</h3>
+      <!-- Hộp thoại hướng dẫn thao tác -->
+      <div class="help" title="Trợ giúp">?</div>
+      <div class="operating-intro display-none">
+        <img class="operating-intro-img" src="./public/1.png" alt="" />
+        <div class="close operating-intro-close" title="Đóng"></div>
+      </div>
+      <div id="boardsGrid" class="boards-grid"></div>
+
+      <!-- Kho voucher (nếu có): -->
+      <!-- Voucher Section -->
+      <div id="voucherSection">
+        <label style="font-weight:bold;">Voucher của bạn:</label>
+        <div id="voucherList" style="margin-top:8px;"></div>
+        <div id="voucherResult" style="margin:6px 0 0 0; font-size:14px; color:#4caf50; display:none;"></div>
+      </div>
+
+      <!-- tạo một ô nhập tiền tip* -->
+      <label>Tiền tip (nếu có):
+        <input type="number" id="tipAmount" placeholder="Nhập tiền tip (VNĐ)" min="0" value="0">
+      </label>
+
+      <!-- Hiển thị tổng tiền thanh toán -->
+
+      <div id="totalPrice" style="margin:12px 0 0 0; font-size:18px; font-weight:bold; color:#6c63ff;">
+       
+      </div>
+
+
+      <button type="submit" style="margin-top: 24px;">Tạo phòng</button>
+      <button type="button" id="resetForm" class="secondary">Reset dữ liệu form</button>
+      <button type="button" id="previewDemo" class="secondary" style="background:#6c63ff;">Xem trước khi tạo</button>
+
+
+      <!-- các lưu ý  -->
+      <div style="margin-top: 16px; font-size: 14px; color: #888;">
+        <p><strong>Lưu ý:</strong></p>
+        <ul>
+          <li>Khi dùng chức năng Xem trước, thời gian load sẽ khá lâu, mất 5-10'</li>
+          <li>Khi chuyển khoản sử dụng hình thứ copy nên copy đầy đủ nội dung và giá tiền đúng(nên dùng mã QR để tránh sai sót)</li>
+          <li>Nếu bạn vô tình load lại form và mất sản phẩm. hãy vào website <a href="">deargift.online </a>  ,Login tài khoản vừa tạo và vào phần quản lý để xem đơn đã tạo</li>
+          <li>Số tiền trong dự án lần này bọn mình sẽ trích một phần và giúp đỡ các bọn nhỏ có hoàn cảnh khó khăn. Các hoạt động sẽ được công bố trên tài khoản tiktok: tớ là Toán.</li>
+        </ul>
+    </form>
+
+    <div id="result"></div>
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <!-- Modal Dialog -->
+  <div id="boardModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle">Chỉnh sửa Board</h3>
+      <form id="boardEditForm" style="position:relative;">
+        <!-- Spinner lên đầu, thêm class để định vị -->
+        <label id="boardTypeLabel" style="position:absolute; top:0; right:0; margin:16px 24px 0 0;">
+          Loại board
+          <select id="boardType">
+            <option value="info">Thông tin</option>
+            <option value="question">Câu hỏi</option>
+          </select>
+        </label>
+        <input type="hidden" id="editingBoardId">
+
+        <!-- Bọc các trường này lại -->
+        <div id="infoFields">
+          <label>Tiêu đề
+            <input type="text" id="boardTitle" required placeholder="Nhập tiêu đề">
+          </label>
+
+          <label>Mô tả
+            <textarea id="boardDesc" rows="3" placeholder="Nhập mô tả"></textarea>
+          </label>
         </div>
-        <div class="close question-close"></div>
-      </div>
+
+        <label>Chọn ảnh
+          <input type="file" id="boardImgFile" accept="image/png,image/jpeg,image/jpg,image/gif">
+          <img id="modalPreviewImg" class="modal-preview-img" alt="Preview">
+        </label>
+
+        <!-- Thêm spinner chọn type -->
+
+        <!-- Thêm form nhập câu hỏi và đáp án, mặc định ẩn -->
+        <div id="questionFields" style="display:none;">
+          <label>Câu hỏi
+            <input type="text" id="boardQuestion" placeholder="Nhập câu hỏi">
+          </label>
+          <label>Đáp án
+            <div id="optionsList"></div>
+            <button type="button" id="addOptionBtn">Thêm đáp án</button>
+          </label>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button type="submit">Lưu thay đổi</button>
+          <button type="button" id="cancelEdit" class="secondary">Hủy</button>
+        </div>
+      </form>
     </div>
 
-    <!-- Hộp thoại hướng dẫn thao tác -->
-    <div class="help" title="Trợ giúp">?</div>
-    <div class="operating-intro display-none">
-      <h2>Hướng Dẫn Thao Tác</h2>
-      <img class="operating-intro-img" src="./public/instructions.png" alt="" />
-      <div class="close operating-intro-close" title="Đóng"></div>
+
+
+  </div>
+
+  <!-- Modal Payment-->
+  <div id="paymentModal"
+    style="display:none; position:fixed; top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
+    <div
+      style="position:relative; margin: 5% auto; width: 90%; max-width: 800px; background:white; padding:20px; border-radius:10px;">
+      <button onclick="document.getElementById('paymentModal').style.display='none'"
+        style="position:absolute;top:10px;right:10px;">✖</button>
+      <iframe id="paymentIframe" style="width:100%; height:600px; border:none;"></iframe>
     </div>
+  </div>
 
-    <!-- Cần điều khiển ảo -->
-    <div id="joystick"></div>
 
-    <div id="rotate-warning" style="display:none;">
-      <div class="rotate-warning-content">
-        <p>Vui lòng xoay ngang màn hình để trải nghiệm tốt nhất!</p>
-      </div>
-    </div>
 
-    <script type="module" src="/src/main.ts"></script>
-<script>
-function checkOrientation() {
-  const warning = document.getElementById('rotate-warning');
-  if (window.innerHeight > window.innerWidth && window.innerWidth < 900) {
-    // Portrait trên mobile
-    warning.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  } else {
-    warning.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-}
-window.addEventListener('orientationchange', checkOrientation);
-window.addEventListener('resize', checkOrientation);
-window.addEventListener('DOMContentLoaded', checkOrientation);
-</script>
-  </body>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="./createroom.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./voucher.js"></script>
+
+
+</body>
+
 </html>
