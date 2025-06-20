@@ -22,8 +22,8 @@ importers:
         version: 0.6.8(three@0.155.0)
     devDependencies:
       '@types/node':
-        specifier: ^18.11.19
-        version: 18.19.84
+        specifier: ^18.19.112
+        version: 18.19.112
       '@types/three':
         specifier: ^0.154.0
         version: 0.154.0
@@ -50,7 +50,7 @@ importers:
         version: 4.9.5
       vite:
         specifier: ^4.0.0
-        version: 4.5.10(@types/node@18.19.84)
+        version: 4.5.10(@types/node@18.19.112)
 
 packages:
 
@@ -235,8 +235,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@18.19.84':
-    resolution: {integrity: sha512-ACYy2HGcZPHxEeWTqowTF7dhXN+JU1o7Gr4b41klnn6pj2LD6rsiGqSZojMdk1Jh2ys3m76ap+ae1vvE4+5+vg==}
+  '@types/node@18.19.112':
+    resolution: {integrity: sha512-i+Vukt9POdS/MBI7YrrkkI5fMfwFtOjphSmt4WXYLfwqsfr6z/HdCx7LqT9M7JktGob8WNgj8nFB4TbGNE4Cog==}
 
   '@types/semver@7.7.0':
     resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
@@ -979,7 +979,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@18.19.84':
+  '@types/node@18.19.112':
     dependencies:
       undici-types: 5.26.5
 
@@ -1574,13 +1574,13 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite@4.5.10(@types/node@18.19.84):
+  vite@4.5.10(@types/node@18.19.112):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.3
       rollup: 3.29.5
     optionalDependencies:
-      '@types/node': 18.19.84
+      '@types/node': 18.19.112
       fsevents: 2.3.3
 
   which@2.0.2:
