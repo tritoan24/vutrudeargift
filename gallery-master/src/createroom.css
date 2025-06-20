@@ -1,0 +1,659 @@
+body {
+     font-family: 'Segoe UI', Arial, sans-serif;
+     background: linear-gradient(135deg, #f0f4f8, #e0e7ff);
+     padding: 40px;
+     margin: 0;
+     min-height: 100vh;
+ }
+
+ .container {
+     max-width: 1200px;
+     margin: auto;
+ }
+
+ form {
+     background: #fff;
+     padding: 32px;
+     border-radius: 12px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+     margin-bottom: 24px;
+ }
+
+ h2,
+ h3 {
+     color: #1a1a40;
+     margin: 0 0 16px;
+ }
+
+ label {
+     display: block;
+     margin-top: 12px;
+     font-weight: 600;
+     color: #333;
+ }
+
+ input,
+ textarea {
+     width: 100%;
+     padding: 10px;
+     margin-top: 6px;
+     border: 1px solid #e0e0e0;
+     border-radius: 6px;
+     box-sizing: border-box;
+     transition: border-color 0.3s;
+ }
+
+ input:focus,
+ textarea:focus {
+     border-color: #ff6b9d;
+     outline: none;
+ }
+
+ /* Boards Grid */
+ .boards-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+     gap: 16px;
+     margin-top: 16px;
+ }
+
+ .board-card {
+     background: white;
+     border: 2px solid #e0e0e0;
+     border-radius: 12px;
+     padding: 16px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     position: relative;
+     overflow: hidden;
+ }
+
+ .board-card:hover {
+     border-color: #ff6b9d;
+     transform: translateY(-2px);
+     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+ }
+
+ .board-card.big-board {
+     grid-column: span 2;
+     background: linear-gradient(135deg, #ff6b9d, #ff4a85);
+     color: white;
+     border-color: #ff6b9d;
+ }
+
+ .board-card.big-board .board-title {
+     color: white;
+ }
+
+ /* Ảnh preview mặc định là hình vuông */
+ .board-preview-img {
+     width: 100%;
+     aspect-ratio: 1/1;
+     object-fit: cover;
+     border-radius: 8px;
+     margin-bottom: 12px;
+     height: auto;
+     display: block;
+ }
+
+ /* Ảnh preview cho big board là hình chữ nhật ngang */
+ .big-board .board-preview-img {
+     aspect-ratio: 5/3;
+     /* hoặc 16/9, tuỳ ý bạn */
+     height: auto;
+ }
+
+ .board-title {
+     font-size: 16px;
+     font-weight: 600;
+     color: #1a1a40;
+     margin-bottom: 8px;
+ }
+
+ .board-author {
+     font-size: 14px;
+     color: #666;
+     margin-bottom: 8px;
+ }
+
+ .board-desc {
+     font-size: 13px;
+     color: #888;
+     line-height: 1.4;
+     overflow: hidden;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     -webkit-box-orient: vertical;
+ }
+
+ .board-id {
+     position: absolute;
+     top: 8px;
+     right: 8px;
+     background: rgba(0, 0, 0, 0.7);
+     color: white;
+     padding: 2px 6px;
+     border-radius: 4px;
+     font-size: 12px;
+     font-weight: bold;
+ }
+
+ .big-board .board-id {
+     background: rgba(255, 255, 255, 0.3);
+ }
+
+ /* Dialog Modal */
+ .modal {
+     display: none;
+     position: fixed;
+     z-index: 1000;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     animation: fadeIn 0.3s ease;
+ }
+
+ .modal.show {
+     display: block;
+ }
+
+ .modal-content {
+     background-color: #fff;
+     margin: 5% auto;
+     padding: 32px;
+     border-radius: 12px;
+     width: 90%;
+     max-width: 600px;
+     position: relative;
+     animation: slideIn 0.3s ease;
+     max-height: 80vh;
+     overflow-y: auto;
+ }
+
+ .close {
+     position: absolute;
+     top: 16px;
+     right: 20px;
+     color: #aaa;
+     font-size: 28px;
+     font-weight: bold;
+     cursor: pointer;
+     line-height: 1;
+ }
+
+ .close:hover {
+     color: #ff6b9d;
+ }
+
+ .modal-preview-img {
+     width: 100%;
+     max-width: 200px;
+     height: auto;
+     border-radius: 8px;
+     margin-top: 8px;
+     display: none;
+ }
+
+ .modal-preview-img.show {
+     display: block;
+ }
+
+ button {
+     padding: 12px 24px;
+     background: #ff6b9d;
+     color: #fff;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+     font-size: 16px;
+     transition: background 0.3s;
+     margin-right: 8px;
+ }
+
+ button:hover {
+     background: #ff4a85;
+ }
+
+ button.secondary {
+     background: #6c757d;
+ }
+
+ button.secondary:hover {
+     background: #5a6268;
+ }
+
+ #result {
+     max-width: 1200px;
+     margin: 24px auto;
+     padding: 16px;
+     border-radius: 8px;
+     background: #e9ffe9;
+ }
+
+ .error {
+     background: #ffe9e9;
+     color: red;
+     padding: 12px;
+     border-radius: 6px;
+ }
+
+ .success {
+     background: #e9ffe9;
+     color: green;
+     padding: 12px;
+     border-radius: 6px;
+ }
+
+ pre {
+     background: #f4f4f4;
+     padding: 12px;
+     border-radius: 6px;
+     overflow-x: auto;
+ }
+
+ .toast {
+     position: fixed;
+     bottom: 20px;
+     right: 20px;
+     padding: 12px 24px;
+     border-radius: 6px;
+     color: #fff;
+     font-size: 14px;
+     opacity: 0;
+     transition: opacity 0.3s;
+     z-index: 1000;
+ }
+
+ .toast.show {
+     opacity: 1;
+ }
+
+ .toast.error {
+     background: #ff4d4d;
+ }
+
+ .toast.success {
+     background: #28a745;
+ }
+
+
+
+ .help {
+     position: fixed;
+     z-index: 1;
+     width: 24px;
+     height: 24px;
+     line-height: 24px;
+     background: #333;
+     color: #ccc;
+     border-radius: 50%;
+     text-align: center;
+     right: 20px;
+     top: 20px;
+     user-select: none;
+     cursor: pointer;
+ }
+
+ /* Hộp thoại hướng dẫn thao tác */
+ .operating-intro {
+     position: fixed;
+     z-index: 2000;
+     left: 0;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     background: rgba(0, 0, 0, 0.7);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: opacity 0.3s;
+ }
+
+ .operating-intro.display-none {
+     display: none;
+ }
+
+ .operating-intro {
+     animation: fadeIn 0.3s;
+ }
+
+
+ .operating-intro-img {
+     max-width: 90vw;
+     max-height: 60vh;
+     display: block;
+     margin: 0 auto 16px auto;
+     border-radius: 12px;
+     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+     background: #fff;
+ }
+
+ .operating-intro .close,
+ .operating-intro-close {
+     position: absolute;
+     top: 18px;
+     right: 24px;
+     width: 36px;
+     height: 36px;
+     cursor: pointer;
+     z-index: 10;
+ }
+
+ .operating-intro .close:before,
+ .operating-intro .close:after,
+ .operating-intro-close:before,
+ .operating-intro-close:after {
+     content: '';
+     position: absolute;
+     left: 17px;
+     top: 7px;
+     width: 3px;
+     height: 22px;
+     background: #fff;
+     border-radius: 2px;
+ }
+
+ .operating-intro .close:before,
+ .operating-intro-close:before {
+     transform: rotate(45deg);
+ }
+
+ .operating-intro .close:after,
+ .operating-intro-close:after {
+     transform: rotate(-45deg);
+ }
+
+ .operating-intro .close:hover,
+ .operating-intro-close:hover {
+     background: rgba(255, 255, 255, 0.08);
+     border-radius: 50%;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes slideIn {
+     from {
+         transform: translateY(-50px);
+         opacity: 0;
+     }
+
+     to {
+         transform: translateY(0);
+         opacity: 1;
+     }
+ }
+
+ @media (max-width: 768px) {
+     .boards-grid {
+         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+         gap: 12px;
+     }
+
+     .board-card.big-board {
+         grid-column: span 1;
+     }
+
+     .modal-content {
+         width: 95%;
+         padding: 20px;
+         margin: 10% auto;
+     }
+
+     #boardModal .modal-content {
+         width: 96vw !important;
+         max-width: 98vw !important;
+         padding: 12px 8px !important;
+         font-size: 15px !important;
+     }
+
+     #boardModal label,
+     #boardModal input,
+     #boardModal textarea,
+     #boardModal select {
+         font-size: 14px !important;
+     }
+
+     #modalPreviewImg {
+         max-width: 120px !important;
+         max-height: 90px !important;
+     }
+
+ }
+
+ @media (max-width: 600px) {
+
+     form,
+     #result {
+         padding: 16px;
+     }
+
+   
+
+     #boardModal .modal-content {
+         width: 96vw !important;
+         max-width: 98vw !important;
+         padding: 12px 8px !important;
+         font-size: 15px !important;
+     }
+
+     @media (max-width:480px) {
+
+         form,
+         #result {
+             padding: 12px;
+         }
+
+
+         #boardModal .modal-content {
+             width: 85vw !important;
+         }
+      
+     }
+
+     #boardModal label,
+     #boardModal input,
+     #boardModal textarea,
+     #boardModal select {
+         font-size: 14px !important;
+     }
+
+     #modalPreviewImg {
+         max-width: 120px !important;
+         max-height: 90px !important;
+     }
+
+     .boards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .board-card {
+    padding: 6px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .board-card img.board-preview-img {
+    max-width: 80px !important;
+    max-height: 80px !important;
+    border-radius: 6px !important;
+  }
+  .board-title, .board-desc, .board-author {
+    font-size: 11px !important;
+  }
+  .board-id {
+    font-size: 10px !important;
+    padding: 2px 4px !important;
+  }
+
+
+ }
+
+ #boardTypeLabel {
+     font-weight: 600;
+     z-index: 2;
+     background: #fff;
+     padding: 4px 12px;
+     border-radius: 8px;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+ }
+
+ #boardTypeLabel select {
+     margin-left: 8px;
+ }
+
+.voucher-item:hover {
+  background: #f3f3fa;
+  border-color: #6c63ff;
+}
+.voucher-item input[type="radio"]:checked + label {
+  color: #6c63ff;
+  font-weight: bold;
+}
+
+
+/* voucher css */
+/* Voucher Section */
+#voucherSection {
+  margin-bottom: 16px;
+}
+
+.voucher-item {
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  border: 1.5px solid #e0e0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f9f9fe;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 1px 4px rgba(108,99,255,0.04);
+  position: relative;
+}
+
+.voucher-item:hover {
+  border-color: #6c63ff;
+  background: #f3f3fa;
+  box-shadow: 0 2px 8px rgba(108,99,255,0.10);
+}
+
+.voucher-item input[type="radio"] {
+  accent-color: #6c63ff;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.voucher-item label {
+  flex: 1;
+  cursor: pointer;
+  font-size: 15px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.voucher-item b {
+  color: #303030;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.voucher-item input[type="radio"]:checked + label b {
+  text-decoration: underline;
+}
+
+.voucher-item input[type="radio"]:checked + label {
+  color: #ff1d2c;
+  font-weight: bold;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #6c63ff;
+  border-radius: 50px;
+  margin-right: 8px;
+}
+
+
+#voucherList span {
+  font-size: 14px;
+  color: #888;
+}
+
+.product-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(108,99,255,0.08);
+  padding: 18px 24px;
+  margin: 24px 0 0 0;
+  max-width: 520px;
+  border: 1.5px solid #e0e0f0;
+  animation: fadeIn 0.5s;
+}
+.product-img-wrap {
+  flex-shrink: 0;
+}
+.product-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1.5px solid #e0e0f0;
+  background: #f7f7fb;
+}
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.product-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+.product-price {
+  font-size: 16px;
+  color: #4caf50;
+}
+.product-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  word-break: break-all;
+}
+.copy-btn {
+  background: #f3f3fa;
+  border: 1px solid #d6d6ea;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+.copy-btn:hover {
+  background: #e0e0f0;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: translateY(0);}
+}
