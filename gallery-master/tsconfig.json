@@ -13,6 +13,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
+  "include": ["public/src/**/*.ts", "public/src/**/*.d.ts", "public/src/**/*.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
