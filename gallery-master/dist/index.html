@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo phòng mới</title>
+  
+  <link rel="stylesheet" href="./assets/index-fb912c42.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <form id="roomForm">
+      <!-- ...existing code... -->
+    <img style="width: 50px;" src="./assets/vite-f943e911.png" alt="Logo" class="logo">
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h2 style="margin: 0;">Tạo phòng mới
+          <span style="margin-left: 10px; color: #ff0000; ">
+            20.000 VNĐ
+          </span>
+        </h2>
+        <div id="authSection">
+          <button type="button" id="googleLoginBtn" style="display:flex;align-items:center;gap:8px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20"
+              alt="Google"> Đăng nhập với Google
+          </button>
+          <div id="userInfo" style="display:none;align-items:center;gap:12px;margin-top:0;">
+            <img id="userAvatar" src="" alt="Avatar"
+              style="width:36px;height:36px;border-radius:50%;border:2px solid #6c63ff;">
+            <div style="display:flex;flex-direction:column;">
+              <span id="userName" style="font-weight:bold;font-size:15px;color:#333;"></span>
+              <span id="userEmail" style="font-size:12px;color:#888;"></span>
+            </div>
+            <button type="button" id="logoutBtn"
+              style="margin-left:12px;background:#9c0202;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Đăng
+              xuất</button>
+          </div>
+        </div>
+      </div>
+
+
+      <label>Chọn màu căn phòng
+        <select id="boardColor">
+          <option value="0xd6d6ea" style="background:#d6d6ea;">Mặc định</option>
+          <option value="0xff69b4" style="background:#ff69b4;">Màu Hồng (nữ đẹp)</option>
+          <option value="0xaea2c5" style="background:#aea2c5;">Màu tím than nhạt (nam đẹp)</option>
+        </select>
+      </label>
+
+      <label>Chọn file nhạc nền
+        <input type="file" id="bgMusic" accept=".mp3,audio/mp3,audio/mpeg">
+      </label>
+
+
+      <h3>Danh sách boards (Click để chỉnh sửa)</h3>
+      <!-- Hộp thoại hướng dẫn thao tác -->
+      <div class="help" title="Trợ giúp">?</div>
+      <div class="operating-intro display-none">
+        <img class="operating-intro-img" src="./assets/1-9e78c2aa.png" alt="" />
+        <div class="close operating-intro-close" title="Đóng"></div>
+      </div>
+      <div id="boardsGrid" class="boards-grid"></div>
+
+      <!-- Kho voucher (nếu có): -->
+      <!-- Voucher Section -->
+      <div id="voucherSection">
+        <label style="font-weight:bold;">Voucher của bạn:</label>
+        <div id="voucherList" style="margin-top:8px;"></div>
+        <div id="voucherResult" style="margin:6px 0 0 0; font-size:14px; color:#4caf50; display:none;"></div>
+      </div>
+
+      <!-- tạo một ô nhập tiền tip* -->
+      <label>Tiền tip (nếu có):
+        <input type="number" id="tipAmount" placeholder="Nhập tiền tip (VNĐ)" min="0" value="0">
+      </label>
+
+      <!-- Hiển thị tổng tiền thanh toán -->
+
+      <div id="totalPrice" style="margin:12px 0 0 0; font-size:18px; font-weight:bold; color:#6c63ff;">
+       
+      </div>
+
+
+      <button type="submit" style="margin-top: 24px;">Tạo phòng</button>
+      <button type="button" id="resetForm" class="secondary">Reset dữ liệu form</button>
+      <button type="button" id="previewDemo" class="secondary" style="background:#6c63ff;">Xem trước khi tạo</button>
+
+
+      <!-- các lưu ý  -->
+      <div style="margin-top: 16px; font-size: 14px; color: #888;">
+        <p><strong>Lưu ý:</strong></p>
+        <ul>
+          <li>Khi dùng chức năng Xem trước, thời gian load sẽ khá lâu, mất 5-10'</li>
+          <li>Khi chuyển khoản sử dụng hình thứ copy nên copy đầy đủ nội dung và giá tiền đúng(nên dùng mã QR để tránh sai sót)</li>
+          <li>Nếu bạn vô tình load lại form và mất sản phẩm. hãy vào website <a href="">deargift.online </a>  ,Login tài khoản vừa tạo và vào phần quản lý để xem đơn đã tạo</li>
+          <li>Số tiền trong dự án lần này bọn mình sẽ trích một phần và giúp đỡ các bọn nhỏ có hoàn cảnh khó khăn. Các hoạt động sẽ được công bố trên tài khoản tiktok: tớ là Toán.</li>
+        </ul>
+    </form>
+
+    <div id="result"></div>
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <!-- Modal Dialog -->
+  <div id="boardModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle">Chỉnh sửa Board</h3>
+      <form id="boardEditForm" style="position:relative;">
+        <!-- Spinner lên đầu, thêm class để định vị -->
+        <label id="boardTypeLabel" style="position:absolute; top:0; right:0; margin:16px 24px 0 0;">
+          Loại board
+          <select id="boardType">
+            <option value="info">Thông tin</option>
+            <option value="question">Câu hỏi</option>
+          </select>
+        </label>
+        <input type="hidden" id="editingBoardId">
+
+        <!-- Bọc các trường này lại -->
+        <div id="infoFields">
+          <label>Tiêu đề
+            <input type="text" id="boardTitle" required placeholder="Nhập tiêu đề">
+          </label>
+
+          <label>Mô tả
+            <textarea id="boardDesc" rows="3" placeholder="Nhập mô tả"></textarea>
+          </label>
+        </div>
+
+        <label>Chọn ảnh
+          <input type="file" id="boardImgFile" accept="image/png,image/jpeg,image/jpg,image/gif">
+          <img id="modalPreviewImg" class="modal-preview-img" alt="Preview">
+        </label>
+
+        <!-- Thêm spinner chọn type -->
+
+        <!-- Thêm form nhập câu hỏi và đáp án, mặc định ẩn -->
+        <div id="questionFields" style="display:none;">
+          <label>Câu hỏi
+            <input type="text" id="boardQuestion" placeholder="Nhập câu hỏi">
+          </label>
+          <label>Đáp án
+            <div id="optionsList"></div>
+            <button type="button" id="addOptionBtn">Thêm đáp án</button>
+          </label>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button type="submit">Lưu thay đổi</button>
+          <button type="button" id="cancelEdit" class="secondary">Hủy</button>
+        </div>
+      </form>
+    </div>
+
+
+
+  </div>
+
+  <!-- Modal Payment-->
+  <div id="paymentModal"
+    style="display:none; position:fixed; top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;">
+    <div
+      style="position:relative; margin: 5% auto; width: 90%; max-width: 800px; background:white; padding:20px; border-radius:10px;">
+      <button onclick="document.getElementById('paymentModal').style.display='none'"
+        style="position:absolute;top:10px;right:10px;">✖</button>
+      <iframe id="paymentIframe" style="width:100%; height:600px; border:none;"></iframe>
+    </div>
+  </div>
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="./createroom.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./voucher.js"></script>
+
+
+</body>
+
+</html>
