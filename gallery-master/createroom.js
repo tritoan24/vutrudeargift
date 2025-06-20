@@ -162,6 +162,14 @@ document.getElementById('boardImgFile').addEventListener('change', (e) => {
   const img = document.getElementById('modalPreviewImg');
   const file = e.target.files[0];
   if (file) {
+    if (file.size > 5 * 1024 * 1024) { // 5MB
+      showToast('Ảnh quá lớn! Vui lòng chọn ảnh nhỏ hơn 5MB.', 'error');
+      e.target.value = "";
+      img.src = "";
+      img.classList.remove('show');
+      img.dataset.local = "";
+      return;
+    }
     const reader = new FileReader();
     reader.onload = function (evt) {
       img.src = evt.target.result;
@@ -304,7 +312,7 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
     showToast('Bạn cần đăng nhập để tạo!', 'error');
     return;
   }
-  const loading = document.querySelector('.loading'); 
+  const loading = document.querySelector('.loading');
   const resultDiv = document.getElementById('result');
 
   // --- Áp dụng voucher nếu có ---
@@ -345,15 +353,15 @@ document.getElementById('roomForm').addEventListener('submit', async (e) => {
   // Nếu tổng tiền = 0 thì bỏ qua thanh toán, chạy luôn các bước tiếp theo
   if (finalPrice === 0) {
     showToast('Miễn phí! Đang tạo phòng...', 'success');
-    await createRoomAndProduct({boards, roomColorHex, loading, resultDiv});
+    await createRoomAndProduct({ boards, roomColorHex, loading, resultDiv });
     return;
   }
 
   // Kiểm tra số tiền tối thiểu
-if (finalPrice <= 2000) {
-  showToast('Số tiền thanh toán phải lớn hơn 2.000 VNĐ!', 'error');
-  return;
-}
+  if (finalPrice <= 2000) {
+    showToast('Số tiền thanh toán phải lớn hơn 2.000 VNĐ!', 'error');
+    return;
+  }
 
   // --- BẮT ĐẦU: Thanh toán trước ---
   try {
@@ -414,25 +422,39 @@ if (finalPrice <= 2000) {
     return;
   }
   // --- KẾT THÚC: Thanh toán, tiếp tục upload và tạo phòng ---
-  await createRoomAndProduct({boards, roomColorHex, loading, resultDiv});
+  await createRoomAndProduct({ boards, roomColorHex, loading, resultDiv });
 });
 
 // --- Tách phần upload và tạo phòng thành hàm riêng ---
-async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) {
+async function createRoomAndProduct({ boards, roomColorHex, loading, resultDiv }) {
   // --- Upload các ảnh base64 lên Cloudinary ---
-  async function uploadImageToCloudinary(base64) {
-    const url = 'https://api.cloudinary.com/v1_1/de6euuwm4/image/upload';
+  async function uploadImageToR2(base64) {
+    // base64 là data:image/...;base64,...
+    // Chuyển base64 thành file Blob
+    function dataURLtoFile(dataurl, filename) {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    }
+
+    const file = dataURLtoFile(base64, 'upload.png');
     const formData = new FormData();
-    formData.append('file', base64);
-    formData.append('upload_preset', 'roomdata');
-    const res = await fetch(url, {
+    formData.append('file', file);
+
+    const res = await fetch('https://dearlove-backend.onrender.com/api/r2/upload', {
       method: 'POST',
       body: formData
     });
     const data = await res.json();
-    if (data.secure_url) {
-      console.log('Ảnh đã upload:', data.secure_url);
-      return data.secure_url;
+    if (data.success && data.data && data.data.url) {
+      console.log('Ảnh đã upload:', data.data.url);
+      return data.data.url;
     }
     throw new Error('Upload ảnh thất bại');
   }
@@ -441,8 +463,13 @@ async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) 
   let audioUrl = null;
   const bgMusicInput = document.getElementById('bgMusic');
   if (bgMusicInput && bgMusicInput.files && bgMusicInput.files[0]) {
+    const audioFile = bgMusicInput.files[0];
+    if (audioFile.size > 8 * 1024 * 1024) { // 8MB
+      showToast('File âm thanh quá lớn! Vui lòng chọn file nhỏ hơn 8MB.', 'error');
+      return;
+    }
     try {
-      audioUrl = await uploadAudioToCloudinary(bgMusicInput.files[0]);
+      audioUrl = await uploadAudioToR2(bgMusicInput.files[0]);
     } catch (err) {
       showToast('Lỗi upload file nhạc nền!', 'error');
       return;
@@ -454,7 +481,7 @@ async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) 
     if (board.img && board.img.startsWith('data:image/')) {
       try {
         showToast(`Đang upload ảnh board ${board.id}...`, 'success');
-        const url = await uploadImageToCloudinary(board.img);
+        const url = await uploadImageToR2(board.img);
         board.img = url;
         boardsData[board.id].img = url; // cập nhật lại vào boardsData
       } catch (err) {
@@ -490,17 +517,17 @@ async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) 
     });
     const result = await res.json();
     if (res.ok) {
-  showToast('Tạo phòng thành công!', 'success');
-  console.log('Kết quả tạo phòng:', result);
+      showToast('Tạo phòng thành công!', 'success');
+      console.log('Kết quả tạo phòng:', result);
 
-  // Lấy id đúng từ kết quả trả về
-  const roomId = result._id || (result.data && result.data._id) || "";
-  const productLink = window.location.origin + "/index.html?room=" + roomId;
-  const productImg = "https://res.cloudinary.com/dtcyfyauk/image/upload/v1750322790/cover_yvkf6s.jpg";
-  const productName = "Room " + roomId;
-  const priceText = `<span style="color:#6c63ff;font-weight:bold;">${finalPrice.toLocaleString()} VNĐ</span>`;
+      // Lấy id đúng từ kết quả trả về
+      const roomId = result._id || (result.data && result.data._id) || "";
+      const productLink = window.location.origin + "/index.html?room=" + roomId;
+      const productImg = "https://res.cloudinary.com/dtcyfyauk/image/upload/v1750322790/cover_yvkf6s.jpg";
+      const productName = "Room " + roomId;
+      const priceText = `<span style="color:#6c63ff;font-weight:bold;">${finalPrice.toLocaleString()} VNĐ</span>`;
 
-  resultDiv.innerHTML = `
+      resultDiv.innerHTML = `
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="${productImg}" alt="Ảnh sản phẩm" class="product-img">
@@ -516,29 +543,29 @@ async function createRoomAndProduct({boards, roomColorHex, loading, resultDiv}) 
     </div>
   `;
 
-  // Xử lý nút copy
-  const copyBtn = document.getElementById('copyProductLink');
-  copyBtn.onclick = function() {
-    navigator.clipboard.writeText(productLink).then(() => {
-      showToast('Đã copy link sản phẩm!', 'success');
-    });
-  };
+      // Xử lý nút copy
+      const copyBtn = document.getElementById('copyProductLink');
+      copyBtn.onclick = function () {
+        navigator.clipboard.writeText(productLink).then(() => {
+          showToast('Đã copy link sản phẩm!', 'success');
+        });
+      };
 
-  // Gọi API lưu sản phẩm
-  const user_uid = localStorage.getItem('user_uid');
-  const product = {
-    uid: user_uid,
-    name: "Room 3D " + roomId,
-    type: "Room3d",
-    price: finalPrice,
-    images: productImg,
-    linkproduct: productLink
-  };
-  createProduct(product);
-} else {
-  resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
-  showToast('Lỗi khi tạo phòng!', 'error');
-}
+      // Gọi API lưu sản phẩm
+      const user_uid = localStorage.getItem('user_uid');
+      const product = {
+        uid: user_uid,
+        name: "Room 3D " + roomId,
+        type: "Room3d",
+        price: finalPrice,
+        images: productImg,
+        linkproduct: productLink
+      };
+      createProduct(product);
+    } else {
+      resultDiv.innerHTML = '<div class="error">Lỗi: ' + (result.message || 'Có lỗi xảy ra!') + '</div>';
+      showToast('Lỗi khi tạo phòng!', 'error');
+    }
   } catch (err) {
     resultDiv.innerHTML = '<div class="error">Lỗi gửi request!</div>';
     showToast('Lỗi gửi request!', 'error');
@@ -606,35 +633,34 @@ document.querySelector('.operating-intro').addEventListener('click', function (e
   }
 });
 
-async function uploadAudioToCloudinary(file) {
-  const url = 'https://api.cloudinary.com/v1_1/de6euuwm4/video/upload';
+async function uploadAudioToR2(file) {
   const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'roomdata');
-  const res = await fetch(url, {
+  formData.append('audio', file);
+
+  const res = await fetch('https://dearlove-backend.onrender.com/api/r2/upload-audio', {
     method: 'POST',
     body: formData
   });
   const data = await res.json();
-  if (data.secure_url) {
-    console.log('Âm thanh đã upload:', data.secure_url);
-    return data.secure_url;
+  if (data.success && data.data && data.data.url) {
+    console.log('Âm thanh đã upload:', data.data.url);
+    return data.data.url;
   }
   throw new Error('Upload âm thanh thất bại');
 }
 
 async function createProduct(product) {
-    const res = await fetch('https://dearlove-backend.onrender.com/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(product)
-    });
-    const data = await res.json();
-    if (data.success) {
-        console.log(data.data); // sản phẩm vừa tạo
-    } else {
-        alert('Lỗi: ' + data.message);
-    }
+  const res = await fetch('https://dearlove-backend.onrender.com/api/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product)
+  });
+  const data = await res.json();
+  if (data.success) {
+    console.log(data.data); // sản phẩm vừa tạo
+  } else {
+    alert('Lỗi: ' + data.message);
+  }
 }
 
 
